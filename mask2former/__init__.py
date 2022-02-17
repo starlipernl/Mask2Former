@@ -18,8 +18,17 @@ from .data.dataset_mappers.mask_former_semantic_dataset_mapper import (
     MaskFormerSemanticDatasetMapper,
 )
 
+from .data.dataset_mappers.mask_former_stereo_dataset_mapper import (
+    MaskFormerStereoDatasetMapper,
+)
+
+from .data.dataset_mappers.mask_former_sceneflow_dataset_mapper import (
+    MaskFormerSceneFlowDatasetMapper,
+)
+
 # models
 from .maskformer_model import MaskFormer
+from .maskformer_model_stereo import MaskFormerStereo
 from .test_time_augmentation import SemanticSegmentorWithTTA
 
 # evaluation

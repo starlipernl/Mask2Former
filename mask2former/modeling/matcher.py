@@ -10,6 +10,7 @@ from torch import nn
 from torch.cuda.amp import autocast
 
 from detectron2.projects.point_rend.point_features import point_sample
+from mask2former.modeling.criterion import smooth_l1_loss_jit
 
 
 def batch_dice_loss(inputs: torch.Tensor, targets: torch.Tensor):

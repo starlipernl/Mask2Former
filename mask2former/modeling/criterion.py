@@ -12,7 +12,7 @@ from torch import nn
 from detectron2.utils.comm import get_world_size
 from detectron2.projects.point_rend.point_features import (
     get_uncertain_point_coords_with_randomness,
-    point_sample,
+    point_sample
 )
 
 from ..utils.misc import is_dist_avail_and_initialized, nested_tensor_from_tensor_list
@@ -64,11 +64,34 @@ def sigmoid_ce_loss(
 
     return loss.mean(1).sum() / num_masks
 
+def smooth_l1_loss(
+        inputs: torch.Tensor,
+        targets: torch.Tensor,
+        num_masks: float,
+    ):
+    """
+    Args:
+        inputs: A float tensor of arbitrary shape.
+                The predictions for each example.
+        targets: A float tensor with the same shape as inputs. Stores the binary
+                 classification label for each element in inputs
+                (0 for the negative class and 1 for the positive class).
+    Returns:
+        Loss tensor
+    """
+
+    loss = F.smooth_l1_loss(inputs, targets, beta=1.0, reduction="none")
+
+    return loss.mean(1).sum() / num_masks
+
 
 sigmoid_ce_loss_jit = torch.jit.script(
     sigmoid_ce_loss
 )  # type: torch.jit.ScriptModule
 
+smooth_l1_loss_jit = torch.jit.script(
+    smooth_l1_loss
+)  # type: torch.jit.ScriptModule
 
 def calculate_uncertainty(logits):
     """
@@ -111,7 +134,7 @@ class SetCriterion(nn.Module):
         self.eos_coef = eos_coef
         self.losses = losses
         empty_weight = torch.ones(self.num_classes + 1)
-        empty_weight[-1] = self.eos_coef
+        empty_weight[0] = self.eos_coef
         self.register_buffer("empty_weight", empty_weight)
 
         # pointwise mask loss parameters
@@ -129,7 +152,7 @@ class SetCriterion(nn.Module):
         idx = self._get_src_permutation_idx(indices)
         target_classes_o = torch.cat([t["labels"][J] for t, (_, J) in zip(targets, indices)])
         target_classes = torch.full(
-            src_logits.shape[:2], self.num_classes, dtype=torch.int64, device=src_logits.device
+            src_logits.shape[:2], 0.0, dtype=torch.int64, device=src_logits.device
         )
         target_classes[idx] = target_classes_o
 

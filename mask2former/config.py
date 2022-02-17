@@ -9,6 +9,7 @@ def add_maskformer2_config(cfg):
     """
     # NOTE: configs from original maskformer
     # data config
+    cfg.DATASETS.ROOT = ''
     # select the dataset mapper
     cfg.INPUT.DATASET_MAPPER_NAME = "mask_former_semantic"
     # Color augmentation
@@ -35,6 +36,7 @@ def add_maskformer2_config(cfg):
     cfg.MODEL.MASK_FORMER.CLASS_WEIGHT = 1.0
     cfg.MODEL.MASK_FORMER.DICE_WEIGHT = 1.0
     cfg.MODEL.MASK_FORMER.MASK_WEIGHT = 20.0
+    cfg.MODEL.MASK_FORMER.SEG_WEIGHT = 0.1
 
     # transformer config
     cfg.MODEL.MASK_FORMER.NHEADS = 8

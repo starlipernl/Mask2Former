@@ -1,0 +1,1230 @@
+[01/19 21:07:16] detectron2 INFO: Rank of current process: 3. World size: 4
+[01/19 21:07:20] detectron2 INFO: Environment info:
+----------------------  ----------------------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.8.12 (default, Oct 12 2021, 13:49:34) [GCC 7.5.0]
+numpy                   1.21.5
+detectron2              0.6 @/home/nstarli/detectron2/detectron2
+Compiler                GCC 7.5
+CUDA compiler           CUDA 11.5
+detectron2 arch flags   7.0
+DETECTRON2_ENV_MODULE   <not set>
+PyTorch                 1.9.0 @/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch
+PyTorch debug build     False
+GPU available           Yes
+GPU 0,1,2,3             Tesla V100-SXM2-32GB (arch=7.0)
+Driver version          495.29.05
+CUDA_HOME               /usr/local/cuda-11
+Pillow                  8.4.0
+torchvision             0.10.0 @/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torchvision
+torchvision arch flags  3.5, 5.0, 6.0, 7.0, 7.5, 8.0, 8.6
+fvcore                  0.1.5.post20211023
+iopath                  0.1.9
+cv2                     4.5.4
+----------------------  ----------------------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) oneAPI Math Kernel Library Version 2021.4-Product Build 20210904 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.1.2 (Git Hash 98be7e8afa711dc9b66c8ff3504129cb82013cdb)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.1
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.0.5
+  - Magma 2.5.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.1, CUDNN_VERSION=8.0.5, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.9.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, 
+
+[01/19 21:07:20] detectron2 INFO: Command line arguments: Namespace(config_file='configs/sceneflow/semantic-segmentation/maskformer2stereo_R101_bs16_90k.yaml', dist_url='tcp://127.0.0.1:65530', eval_only=False, machine_rank=0, num_gpus=4, num_machines=1, opts=[], resume=False)
+[01/19 21:07:20] detectron2 INFO: Contents of args.config_file=configs/sceneflow/semantic-segmentation/maskformer2stereo_R101_bs16_90k.yaml:
+[38;5;197m_BASE_[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mmaskformer2stereo_R50_bs16_90k.yaml[39m
+[38;5;197mMODEL[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mWEIGHTS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mcheckpoints/R-101.pkl[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;197mRESNETS[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mDEPTH[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m101[39m
+[38;5;15m    [39m[38;5;197mSTEM_TYPE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mbasic[39m[38;5;186m"[39m[38;5;15m  [39m[38;5;242m# not used[39m
+[38;5;15m    [39m[38;5;197mSTEM_OUT_CHANNELS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m64[39m
+[38;5;15m    [39m[38;5;197mSTRIDE_IN_1X1[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;197mOUT_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres2[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mNORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mSyncBN[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mRES5_MULTI_GRID[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;15m1[39m[38;5;15m,[39m[38;5;15m [39m[38;5;15m1[39m[38;5;15m,[39m[38;5;15m [39m[38;5;15m1[39m[38;5;15m][39m[38;5;15m  [39m[38;5;242m# not used[39m
+
+[01/19 21:07:20] detectron2.utils.env INFO: Using a generated random seed 20943644
+[01/19 21:07:22] detectron2.engine.defaults INFO: Model:
+MaskFormerStereo(
+  (backbone): ResNet(
+    (stem): BasicStem(
+      (conv1): Conv2d(
+        3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+        (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (res2): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          64, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res3): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (3): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res4): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          512, 1024, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (3): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (4): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (5): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (6): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (7): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (8): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (9): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (10): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (11): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (12): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (13): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (14): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (15): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (16): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (17): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (18): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (19): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (20): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (21): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (22): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res5): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          1024, 2048, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+  )
+  (sem_seg_head): MaskFormerHead(
+    (pixel_decoder): MSDeformAttnPixelDecoder(
+      (input_proj): ModuleList(
+        (0): Sequential(
+          (0): Conv2d(4096, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+        (1): Sequential(
+          (0): Conv2d(2048, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+        (2): Sequential(
+          (0): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (transformer): MSDeformAttnTransformerEncoderOnly(
+        (encoder): MSDeformAttnTransformerEncoder(
+          (layers): ModuleList(
+            (0): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (1): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (2): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (3): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (4): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (5): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+        )
+      )
+      (pe_layer): Positional encoding PositionEmbeddingSine
+          num_pos_feats: 128
+          temperature: 10000
+          normalize: True
+          scale: 6.283185307179586
+      (mask_features): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+      (adapter_1): Conv2d(
+        512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+        (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+      (layer_1): Conv2d(
+        256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+        (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+    )
+    (predictor): MultiScaleMaskedTransformerDecoder(
+      (pe_layer): Positional encoding PositionEmbeddingSine
+          num_pos_feats: 128
+          temperature: 10000
+          normalize: True
+          scale: 6.283185307179586
+      (transformer_self_attention_layers): ModuleList(
+        (0): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (1): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (2): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (3): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (4): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (5): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (6): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (7): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (8): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+      (transformer_cross_attention_layers): ModuleList(
+        (0): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (1): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (2): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (3): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (4): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (5): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (6): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (7): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (8): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+      (transformer_ffn_layers): ModuleList(
+        (0): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (1): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (2): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (3): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (4): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (5): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (6): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (7): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (8): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+      (decoder_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+      (query_feat): Embedding(300, 256)
+      (query_embed): Embedding(300, 256)
+      (level_embed): Embedding(3, 256)
+      (input_proj): ModuleList(
+        (0): Sequential()
+        (1): Sequential()
+        (2): Sequential()
+      )
+      (class_embed): Linear(in_features=256, out_features=194, bias=True)
+      (mask_embed): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=256, bias=True)
+        )
+      )
+    )
+  )
+  (criterion): Criterion SetCriterion
+      matcher: Matcher HungarianMatcher
+          cost_class: 2.0
+          cost_mask: 5.0
+          cost_dice: 5.0
+      losses: ['labels', 'masks']
+      weight_dict: {'loss_ce': 2.0, 'loss_mask': 5.0, 'loss_dice': 5.0, 'loss_ce_0': 2.0, 'loss_mask_0': 5.0, 'loss_dice_0': 5.0, 'loss_ce_1': 2.0, 'loss_mask_1': 5.0, 'loss_dice_1': 5.0, 'loss_ce_2': 2.0, 'loss_mask_2': 5.0, 'loss_dice_2': 5.0, 'loss_ce_3': 2.0, 'loss_mask_3': 5.0, 'loss_dice_3': 5.0, 'loss_ce_4': 2.0, 'loss_mask_4': 5.0, 'loss_dice_4': 5.0, 'loss_ce_5': 2.0, 'loss_mask_5': 5.0, 'loss_dice_5': 5.0, 'loss_ce_6': 2.0, 'loss_mask_6': 5.0, 'loss_dice_6': 5.0, 'loss_ce_7': 2.0, 'loss_mask_7': 5.0, 'loss_dice_7': 5.0, 'loss_ce_8': 2.0, 'loss_mask_8': 5.0, 'loss_dice_8': 5.0}
+      num_classes: 193
+      eos_coef: 0.1
+      num_points: 12544
+      oversample_ratio: 3.0
+      importance_sample_ratio: 0.75
+)
+[01/19 21:07:22] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in training: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/19 21:07:26] detectron2.data.build INFO: Using training sampler TrainingSampler
+[01/19 21:07:26] detectron2.data.common INFO: Serializing 35454 elements to byte tensors and concatenating them all ...
+[01/19 21:07:26] detectron2.data.common INFO: Serialized dataset takes 10.76 MiB
+[01/19 21:07:27] fvcore.common.checkpoint INFO: [Checkpointer] Loading from checkpoints/R-101.pkl ...
+[01/19 21:07:27] detectron2.checkpoint.c2_model_loading INFO: Renaming Caffe2 weights ......
+[01/19 21:07:27] detectron2.checkpoint.c2_model_loading INFO: Following weights matched with submodule backbone:
+| Names in Model    | Names in Checkpoint       | Shapes                                          |
+|:------------------|:--------------------------|:------------------------------------------------|
+| res2.0.conv1.*    | res2_0_branch2a_{bn_*,w}  | (64,) (64,) (64,) (64,) (64,64,1,1)             |
+| res2.0.conv2.*    | res2_0_branch2b_{bn_*,w}  | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.0.conv3.*    | res2_0_branch2c_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.0.shortcut.* | res2_0_branch1_{bn_*,w}   | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.1.conv1.*    | res2_1_branch2a_{bn_*,w}  | (64,) (64,) (64,) (64,) (64,256,1,1)            |
+| res2.1.conv2.*    | res2_1_branch2b_{bn_*,w}  | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.1.conv3.*    | res2_1_branch2c_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.2.conv1.*    | res2_2_branch2a_{bn_*,w}  | (64,) (64,) (64,) (64,) (64,256,1,1)            |
+| res2.2.conv2.*    | res2_2_branch2b_{bn_*,w}  | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.2.conv3.*    | res2_2_branch2c_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res3.0.conv1.*    | res3_0_branch2a_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,256,1,1)       |
+| res3.0.conv2.*    | res3_0_branch2b_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.0.conv3.*    | res3_0_branch2c_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.0.shortcut.* | res3_0_branch1_{bn_*,w}   | (512,) (512,) (512,) (512,) (512,256,1,1)       |
+| res3.1.conv1.*    | res3_1_branch2a_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.1.conv2.*    | res3_1_branch2b_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.1.conv3.*    | res3_1_branch2c_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.2.conv1.*    | res3_2_branch2a_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.2.conv2.*    | res3_2_branch2b_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.2.conv3.*    | res3_2_branch2c_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.3.conv1.*    | res3_3_branch2a_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.3.conv2.*    | res3_3_branch2b_{bn_*,w}  | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.3.conv3.*    | res3_3_branch2c_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res4.0.conv1.*    | res4_0_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,512,1,1)       |
+| res4.0.conv2.*    | res4_0_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.0.conv3.*    | res4_0_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.0.shortcut.* | res4_0_branch1_{bn_*,w}   | (1024,) (1024,) (1024,) (1024,) (1024,512,1,1)  |
+| res4.1.conv1.*    | res4_1_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.1.conv2.*    | res4_1_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.1.conv3.*    | res4_1_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.10.conv1.*   | res4_10_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.10.conv2.*   | res4_10_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.10.conv3.*   | res4_10_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.11.conv1.*   | res4_11_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.11.conv2.*   | res4_11_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.11.conv3.*   | res4_11_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.12.conv1.*   | res4_12_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.12.conv2.*   | res4_12_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.12.conv3.*   | res4_12_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.13.conv1.*   | res4_13_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.13.conv2.*   | res4_13_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.13.conv3.*   | res4_13_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.14.conv1.*   | res4_14_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.14.conv2.*   | res4_14_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.14.conv3.*   | res4_14_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.15.conv1.*   | res4_15_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.15.conv2.*   | res4_15_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.15.conv3.*   | res4_15_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.16.conv1.*   | res4_16_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.16.conv2.*   | res4_16_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.16.conv3.*   | res4_16_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.17.conv1.*   | res4_17_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.17.conv2.*   | res4_17_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.17.conv3.*   | res4_17_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.18.conv1.*   | res4_18_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.18.conv2.*   | res4_18_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.18.conv3.*   | res4_18_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.19.conv1.*   | res4_19_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.19.conv2.*   | res4_19_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.19.conv3.*   | res4_19_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.2.conv1.*    | res4_2_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.2.conv2.*    | res4_2_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.2.conv3.*    | res4_2_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.20.conv1.*   | res4_20_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.20.conv2.*   | res4_20_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.20.conv3.*   | res4_20_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.21.conv1.*   | res4_21_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.21.conv2.*   | res4_21_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.21.conv3.*   | res4_21_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.22.conv1.*   | res4_22_branch2a_{bn_*,w} | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.22.conv2.*   | res4_22_branch2b_{bn_*,w} | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.22.conv3.*   | res4_22_branch2c_{bn_*,w} | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.3.conv1.*    | res4_3_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.3.conv2.*    | res4_3_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.3.conv3.*    | res4_3_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.4.conv1.*    | res4_4_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.4.conv2.*    | res4_4_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.4.conv3.*    | res4_4_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.5.conv1.*    | res4_5_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.5.conv2.*    | res4_5_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.5.conv3.*    | res4_5_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.6.conv1.*    | res4_6_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.6.conv2.*    | res4_6_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.6.conv3.*    | res4_6_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.7.conv1.*    | res4_7_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.7.conv2.*    | res4_7_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.7.conv3.*    | res4_7_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.8.conv1.*    | res4_8_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.8.conv2.*    | res4_8_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.8.conv3.*    | res4_8_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.9.conv1.*    | res4_9_branch2a_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.9.conv2.*    | res4_9_branch2b_{bn_*,w}  | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.9.conv3.*    | res4_9_branch2c_{bn_*,w}  | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res5.0.conv1.*    | res5_0_branch2a_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,1024,1,1)      |
+| res5.0.conv2.*    | res5_0_branch2b_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.0.conv3.*    | res5_0_branch2c_{bn_*,w}  | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| res5.0.shortcut.* | res5_0_branch1_{bn_*,w}   | (2048,) (2048,) (2048,) (2048,) (2048,1024,1,1) |
+| res5.1.conv1.*    | res5_1_branch2a_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,2048,1,1)      |
+| res5.1.conv2.*    | res5_1_branch2b_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.1.conv3.*    | res5_1_branch2c_{bn_*,w}  | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| res5.2.conv1.*    | res5_2_branch2a_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,2048,1,1)      |
+| res5.2.conv2.*    | res5_2_branch2b_{bn_*,w}  | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.2.conv3.*    | res5_2_branch2c_{bn_*,w}  | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| stem.conv1.norm.* | res_conv1_bn_*            | (64,) (64,) (64,) (64,)                         |
+| stem.conv1.weight | conv1_w                   | (64, 3, 7, 7)                                   |
+[01/19 21:07:27] fvcore.common.checkpoint WARNING: Some model parameters or buffers are not found in the checkpoint:
+[34mcriterion.empty_weight[0m
+[34msem_seg_head.pixel_decoder.adapter_1.norm.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.adapter_1.weight[0m
+[34msem_seg_head.pixel_decoder.input_proj.0.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.0.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.1.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.1.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.2.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.2.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.layer_1.norm.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.layer_1.weight[0m
+[34msem_seg_head.pixel_decoder.mask_features.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.3.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.4.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.5.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.level_embed[0m
+[34msem_seg_head.predictor.class_embed.{bias, weight}[0m
+[34msem_seg_head.predictor.decoder_norm.{bias, weight}[0m
+[34msem_seg_head.predictor.level_embed.weight[0m
+[34msem_seg_head.predictor.mask_embed.layers.0.{bias, weight}[0m
+[34msem_seg_head.predictor.mask_embed.layers.1.{bias, weight}[0m
+[34msem_seg_head.predictor.mask_embed.layers.2.{bias, weight}[0m
+[34msem_seg_head.predictor.query_embed.weight[0m
+[34msem_seg_head.predictor.query_feat.weight[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.3.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.3.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.3.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.4.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.4.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.4.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.5.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.5.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.5.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.6.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.6.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.6.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.7.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.7.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.7.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.8.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.8.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.8.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.3.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.3.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.3.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.4.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.4.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.4.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.5.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.5.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.5.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.6.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.6.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.6.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.7.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.7.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.7.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.8.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.8.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.8.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.3.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.3.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.3.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.4.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.4.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.4.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.5.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.5.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.5.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.6.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.6.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.6.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.7.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.7.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.7.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.8.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.8.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.8.self_attn.{in_proj_bias, in_proj_weight}[0m
+[01/19 21:07:27] fvcore.common.checkpoint WARNING: The checkpoint state_dict contains keys that are not used by the model:
+  [35mfc1000.{bias, weight}[0m
+[01/19 21:07:27] detectron2.engine.train_loop INFO: Starting training from iteration 0
+[01/19 23:12:50] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/19 23:12:50] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/19 23:12:50] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 01:08:34] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 01:08:34] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 01:08:34] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 03:02:33] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 03:02:34] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 03:02:34] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 04:55:51] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 04:55:51] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 04:55:51] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 06:49:05] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 06:49:05] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 06:49:05] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 08:42:10] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 08:42:10] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 08:42:10] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 10:35:14] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 10:35:15] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 10:35:15] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 12:28:20] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 12:28:21] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 12:28:21] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 14:21:25] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 14:21:25] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 14:21:25] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 16:14:39] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 16:14:39] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 16:14:39] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 18:12:27] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 18:12:27] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 18:12:27] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 20:03:34] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 20:03:35] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 20:03:35] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 22:03:10] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 22:03:10] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 22:03:10] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/20 23:57:12] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/20 23:57:13] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/20 23:57:13] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/21 01:50:24] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/21 01:50:25] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/21 01:50:25] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/21 03:43:27] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/21 03:43:28] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/21 03:43:28] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/21 05:35:34] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/21 05:35:34] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/21 05:35:34] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/21 07:27:07] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/21 07:27:07] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/21 07:27:07] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/21 09:18:50] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/21 09:18:50] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/21 09:18:50] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[01/21 11:11:58] detectron2.engine.hooks INFO: Overall training speed: 59998 iterations in 1 day, 12:01:38 (2.1617 s / it)
+[01/21 11:11:58] detectron2.engine.hooks INFO: Total training time: 1 day, 14:04:03 (2:02:24 on hooks)
+[01/21 11:11:58] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[01/21 11:11:58] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[01/21 11:11:58] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
