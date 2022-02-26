@@ -33,7 +33,6 @@ from detectron2.projects.point_rend.point_features import (
 
 from .utils.misc import nested_tensor_from_tensor_list
 
-
 def smooth_l1_loss(
         inputs: torch.Tensor,
         targets: torch.Tensor,
@@ -105,6 +104,8 @@ class SetCriterionStereo(SetCriterion):
         """
         assert "pred_masks" in outputs
 
+        # TODO make this configurable
+        kitti = False
         src_idx = self._get_src_permutation_idx(indices)
         tgt_idx = self._get_tgt_permutation_idx(indices)
         src_masks = outputs["pred_masks"]
@@ -115,36 +116,60 @@ class SetCriterionStereo(SetCriterion):
         target_masks = target_masks.to(src_masks)
         target_masks = target_masks[tgt_idx]
 
-        # No need to upsample predictions as we are using normalized coordinates :)
-        # N x 1 x H x W
-        src_masks = src_masks[:, None]
-        target_masks = target_masks[:, None]
+        if kitti:
+            loss_mask = 0
+            loss_dice = 0
+            src_masks =  src_masks = F.interpolate(
+                src_masks[None],
+                size=(target_masks.shape[-2], target_masks.shape[-1]),
+                mode="bilinear",
+                align_corners=False,
+            ).squeeze()
+            for t_ind in range(len(targets)):
+                valid_mask = targets[t_ind]['sem_seg'] > 0
+                t_src_masks = src_masks[src_idx[0] == t_ind]
+                t_target_masks = target_masks[tgt_idx[0] == t_ind]
+                loss_mask += sigmoid_ce_loss_jit(t_src_masks[:,valid_mask], t_target_masks[:,valid_mask], num_masks=1)
+                loss_dice += dice_loss_jit(t_src_masks[:,valid_mask], t_target_masks[:,valid_mask], num_masks=1)
 
-        with torch.no_grad():
-            # sample point_coords
-            point_coords = get_uncertain_point_coords_with_randomness(
+            loss_mask = loss_mask/num_masks
+            loss_dice = loss_dice/num_masks
+
+
+        else:
+            # No need to upsample predictions as we are using normalized coordinates :)
+            # N x 1 x H x W
+            src_masks = src_masks[:, None]
+            target_masks = target_masks[:, None]
+
+            with torch.no_grad():
+                # sample point_coords
+                point_coords = get_uncertain_point_coords_with_randomness(
+                    src_masks,
+                    lambda logits: calculate_uncertainty(logits),
+                    self.num_points,
+                    self.oversample_ratio,
+                    self.importance_sample_ratio,
+                )
+                # get gt labels
+                point_labels = point_sample(
+                    target_masks,
+                    point_coords,
+                    align_corners=False,
+                ).squeeze(1)
+
+            point_logits = point_sample(
                 src_masks,
-                lambda logits: calculate_uncertainty(logits),
-                self.num_points,
-                self.oversample_ratio,
-                self.importance_sample_ratio,
-            )
-            # get gt labels
-            point_labels = point_sample(
-                target_masks,
                 point_coords,
                 align_corners=False,
             ).squeeze(1)
 
-        point_logits = point_sample(
-            src_masks,
-            point_coords,
-            align_corners=False,
-        ).squeeze(1)
+            loss_mask = sigmoid_ce_loss_jit(point_logits, point_labels, num_masks)
+            loss_dice = dice_loss_jit(point_logits, point_labels, num_masks)
 
         losses = {
-            "loss_mask": sigmoid_ce_loss_jit(point_logits, point_labels, num_masks),
-            "loss_dice": dice_loss_jit(point_logits, point_labels, num_masks),
+            "loss_mask": loss_mask,
+            "loss_dice": loss_dice
         }
 
         del src_masks
@@ -153,18 +178,24 @@ class SetCriterionStereo(SetCriterion):
 
     def loss_segs(self, outputs, targets, indices, num_masks):
         gt_seg = [t["sem_seg"].unsqueeze(0) for t in targets]
-        # TODO use valid to mask invalid areas due to padding in loss
         gt_seg = torch.cat(gt_seg)
-        mask_pred = outputs["pred_masks"]
-        mask_pred = F.interpolate(
-                mask_pred[None],
-                size=(192, gt_seg.shape[-2], gt_seg.shape[-1]),
-                mode="trilinear",
+        # mask_pred = outputs["pred_masks"]
+        # semseg = outputs["pred_seg"]  * 4
+        # mask_pred = F.interpolate(
+        #         mask_pred[None],
+        #         size=(192, gt_seg.shape[-2], gt_seg.shape[-1]),
+        #         mode="trilinear",
+        #         align_corners=False,
+        # ).squeeze(0)
+        semseg = F.interpolate(
+                outputs['pred_seg'],
+                size=(gt_seg.shape[-2], gt_seg.shape[-1]),
+                mode="bilinear",
                 align_corners=False,
-        ).squeeze(0)
-        mask_pred = mask_pred.softmax(1)
-        classes = torch.tensor([range(1,mask_pred.shape[1]+1)]).to(mask_pred)[:,:,None,None]
-        semseg = (mask_pred * classes).sum(1)
+        ).squeeze() * 4
+        # mask_pred = mask_pred.softmax(1)
+        # classes = torch.tensor([range(1,mask_pred.shape[1]+1)]).to(mask_pred)[:,:,None,None]
+        # semseg = (mask_pred * classes).sum(1)
         valid_mask = gt_seg != 0
         loss_seg = smooth_l1_loss(semseg[valid_mask], gt_seg[valid_mask].float(), num_masks)
         losses = {"loss_seg": loss_seg}
@@ -408,12 +439,12 @@ class FixedMatcher(nn.Module):
 
 class UpsampleMasks(nn.Module):
 
-    def __init__(self, num_queries=100):
+    def __init__(self, conv_dim=192):
         super().__init__()
-        self.num_queries = num_queries
+        self.conv_dim = conv_dim
         self.conv2d = Conv2d(
-            num_queries,
-            num_queries,
+            conv_dim,
+            conv_dim,
             kernel_size=3,
             stride=1,
             padding=1,
@@ -422,14 +453,74 @@ class UpsampleMasks(nn.Module):
 
     def forward(self, pred_masks, height, width):
         pred_masks = F.interpolate(
-                pred_masks,
-                size=(height, width),
-                mode="bilinear",
+                pred_masks[None],
+                size=(self.conv_dim, height, width),
+                mode="trilinear",
                 align_corners=False,
-            )
+            ).squeeze(0)
         pred_masks = self.conv2d(pred_masks)
         return pred_masks
 
+def calc_disp(masks):
+    masks = masks.softmax(1)
+    disp_levels = torch.tensor([range(1,masks.shape[1]+1)]).to(masks)[:,:,None,None]
+    return (masks * disp_levels).sum(1, keepdim=True)
+
+
+class BasicBlock(nn.Module):
+    def __init__(self, in_channel, out_channel, stride, dilation):
+        super().__init__()
+        norm = nn.GroupNorm(32, out_channel)
+        self.conv1 = Conv2d(
+            in_channel, 
+            out_channel,
+            kernel_size=3, 
+            stride=stride, 
+            padding='same', 
+            dilation=dilation, 
+            norm=norm, 
+            activation=F.relu
+        )
+
+        weight_init.c2_xavier_fill(self.conv1)
+
+    def forward(self, x):
+        out = self.conv1(x)
+        out = x + out
+        return out
+
+class DispRefineLayer(nn.Module):
+    def __init__(self, in_channel):
+        super().__init__()
+
+        norm = nn.GroupNorm(32, 256)
+        self.conv2d_feature = Conv2d(
+            in_channel, 
+            256, 
+            kernel_size=3, 
+            stride=1, 
+            padding=1, 
+            norm=norm,
+            activation=F.relu
+        )
+        self.residual_atrous_blocks = nn.ModuleList()
+        atrous_list = [1, 2, 4, 8 , 1 , 1]
+        for di in atrous_list:
+            self.residual_atrous_blocks.append(BasicBlock(256, 256, stride=1, dilation=di))
+
+                
+        self.conv2d_out = Conv2d(256, 1, kernel_size=3, stride=1, padding=1)
+
+        weight_init.c2_xavier_fill(self.conv2d_feature)
+        weight_init.c2_xavier_fill(self.conv2d_out)
+
+    def forward(self, features, disp):
+        output = self.conv2d_feature(
+            torch.cat([features, disp], dim=1))
+        for atrous_block in self.residual_atrous_blocks:
+            output = atrous_block(output)
+        
+        return F.relu(disp + self.conv2d_out(output))
 
 @META_ARCH_REGISTRY.register()
 class MaskFormerStereo(nn.Module):
@@ -444,6 +535,7 @@ class MaskFormerStereo(nn.Module):
         backbone: Backbone,
         sem_seg_head: nn.Module,
         upsampler = nn.Module,
+        refinement_layer = nn.Module,
         criterion: nn.Module,
         num_queries: int,
         object_mask_threshold: float,
@@ -486,6 +578,7 @@ class MaskFormerStereo(nn.Module):
         super().__init__()
         self.backbone = backbone
         self.sem_seg_head = sem_seg_head
+        self.refinement_layer = refinement_layer
         self.criterion = criterion
         self.upsampler = upsampler
         self.num_queries = num_queries
@@ -526,6 +619,9 @@ class MaskFormerStereo(nn.Module):
 
         sem_seg_head = build_sem_seg_head(cfg, seg_head_input_shape)
 
+        refinement_layer = DispRefineLayer(in_channel=cfg.MODEL.SEM_SEG_HEAD.MASK_DIM+1)
+        # refinement_layer = DispRefineLayer(in_channel=513)
+
         # Loss parameters:
         deep_supervision = cfg.MODEL.MASK_FORMER.DEEP_SUPERVISION
         no_object_weight = cfg.MODEL.MASK_FORMER.NO_OBJECT_WEIGHT
@@ -552,7 +648,7 @@ class MaskFormerStereo(nn.Module):
             dec_layers = cfg.MODEL.MASK_FORMER.DEC_LAYERS
             aux_weight_dict = {}
             for i in range(dec_layers - 1):
-                aux_weight_dict.update({k + f"_{i}": v for k, v in weight_dict.items()})
+                aux_weight_dict.update({k + f"_{i}": v for k, v in weight_dict.items() if k != 'loss_seg'})
             weight_dict.update(aux_weight_dict)
 
         losses = ["labels", "masks", "segs"]
@@ -572,11 +668,18 @@ class MaskFormerStereo(nn.Module):
         #     num_queries=cfg.MODEL.MASK_FORMER.NUM_OBJECT_QUERIES,
         # )
 
+        upsampler = None
+
+        # upsampler = UpsampleMasks(
+        #     conv_dim=192,
+        # )
+
         return {
             "backbone": backbone,
             "sem_seg_head": sem_seg_head,
+            "refinement_layer": refinement_layer,
             "criterion": criterion,
-            "upsampler": None,
+            "upsampler": upsampler,
             "num_queries": cfg.MODEL.MASK_FORMER.NUM_OBJECT_QUERIES,
             "object_mask_threshold": cfg.MODEL.MASK_FORMER.TEST.OBJECT_MASK_THRESHOLD,
             "overlap_threshold": cfg.MODEL.MASK_FORMER.TEST.OVERLAP_THRESHOLD,
@@ -645,19 +748,37 @@ class MaskFormerStereo(nn.Module):
             features[feat_key] = torch.cat([features_left[feat_key], features_right[feat_key]], dim=1)
 
         outputs = self.sem_seg_head(features)
-        # outputs['pred_masks'] = self.upsampler(
+
+        # calculate seg masks
+        outputs['pred_seg'] = calc_disp(outputs['pred_masks'])
+        outputs['pred_seg'] = self.refinement_layer(outputs['mask_features'], outputs['pred_seg'])
+        # outputs['pred_seg'] = self.refinement_layer(features['res2'], outputs['pred_seg'])
+
+        if self.training:
+            if 'aux_outputs' in outputs.keys():
+                for i in range(len(outputs['aux_outputs'])):
+                    outputs['aux_outputs'][i]['pred_seg'] = calc_disp(outputs['aux_outputs'][i]['pred_masks'])
+                    # outputs['aux_outputs'][i]['pred_seg'] = self.refinement_layer(
+                    #     outputs['aux_outputs'][i]['mask_features'], 
+                    #     outputs['aux_outputs'][i]['pred_seg']
+                    # )
+
+        
+
+        # outputs['seg_masks'] = self.upsampler(
         #     outputs['pred_masks'],
         #     images_left.tensor.shape[-2],
         #     images_left.tensor.shape[-1]
         # )
 
-        # if 'aux_outputs' in outputs.keys():
-        #     for i in range(len(outputs['aux_outputs'])):
-        #         outputs['aux_outputs'][i]['pred_masks'] = self.upsampler(
-        #             outputs['aux_outputs'][i]['pred_masks'],
-        #             images_left.tensor.shape[-2],
-        #             images_left.tensor.shape[-1]
-        #         )
+        # if self.training:
+        #     if 'aux_outputs' in outputs.keys():
+        #         for i in range(len(outputs['aux_outputs'])):
+        #             outputs['aux_outputs'][i]['seg_masks'] = self.upsampler(
+        #                 outputs['aux_outputs'][i]['pred_masks'],
+        #                 images_left.tensor.shape[-2],
+        #                 images_left.tensor.shape[-1]
+        #             )
 
         if self.training:
             # mask classification target
@@ -680,7 +801,8 @@ class MaskFormerStereo(nn.Module):
             return losses
         else:
             mask_cls_results = outputs["pred_logits"]
-            mask_pred_results = outputs["pred_masks"]
+            # mask_pred_results = outputs["pred_masks"]
+            mask_pred_results = outputs["pred_seg"]
             # upsample masks
             # mask_pred_results = F.interpolate(
             #     mask_pred_results[None],
@@ -689,6 +811,7 @@ class MaskFormerStereo(nn.Module):
             #     align_corners=False,
             # ).squeeze(0)
             mask_pred_results = F.interpolate(
+                # mask_pred_results[:,None, ...],
                 mask_pred_results,
                 size=(images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
                 mode="bilinear",
@@ -750,18 +873,18 @@ class MaskFormerStereo(nn.Module):
     def semantic_inference(self, mask_cls, mask_pred):
         # mask_cls = F.softmax(mask_cls, dim=-1)[..., 1:]
         # mask_pred = mask_pred.sigmoid()
-        mask_pred = F.interpolate(mask_pred.permute((1,0,2))[None], [192, mask_pred.shape[-1]], mode='bilinear')
-        mask_pred = mask_pred.squeeze().permute((1,0,2)).softmax(0)
-        # mask_pred = mask_pred.softmax(0)
-        # mask_pred = F.interpolate(mask_pred.unsqueeze(0).permute((0,2,1,3)), [192, mask_pred.shape[-1]], mode='bilinear').squeeze().softmax(0)
-        # argsoftmax sum class likelihoods multiplied by disparities (weighted average of disparity)
-        # semseg = torch.einsum("qc,qhw->chw", mask_cls, mask_pred) #* torch.tensor([range(1,mask_cls.shape[-1]+1)])[0,:,None,None].to(mask_cls)).sum(0)
-        classes = torch.tensor([range(1,mask_pred.shape[0]+1)]).to(mask_pred).squeeze()[:,None,None]
-        # mask_cls = (mask_cls*classes).sum(-1)[..., None, None]
-        # semseg = (mask_pred * mask_cls).sum(0)
-        # semseg = (semseg * classes).sum(0)
-        semseg = (mask_pred * classes).sum(0)
-        return semseg
+        # mask_pred = F.interpolate(mask_pred.permute((1,0,2))[None], [192, mask_pred.shape[-1]], mode='bilinear')
+        # mask_pred = mask_pred.squeeze().permute((1,0,2)).softmax(0)
+        # # mask_pred = mask_pred.softmax(0)
+        # # mask_pred = F.interpolate(mask_pred.unsqueeze(0).permute((0,2,1,3)), [192, mask_pred.shape[-1]], mode='bilinear').squeeze().softmax(0)
+        # # argsoftmax sum class likelihoods multiplied by disparities (weighted average of disparity)
+        # # semseg = torch.einsum("qc,qhw->chw", mask_cls, mask_pred) #* torch.tensor([range(1,mask_cls.shape[-1]+1)])[0,:,None,None].to(mask_cls)).sum(0)
+        # classes = torch.tensor([range(1,mask_pred.shape[0]+1)]).to(mask_pred).squeeze()[:,None,None]
+        # # mask_cls = (mask_cls*classes).sum(-1)[..., None, None]
+        # # semseg = (mask_pred * mask_cls).sum(0)
+        # # semseg = (semseg * classes).sum(0)
+        # semseg = (mask_pred * classes).sum(0)
+        return mask_pred * 4
 
     def panoptic_inference(self, mask_cls, mask_pred):
         scores, labels = F.softmax(mask_cls, dim=-1).max(-1)

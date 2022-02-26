@@ -14,6 +14,7 @@ import os
 import re
 import time
 
+import cv2
 
 from typing import List, Union
 from contextlib import ExitStack, contextmanager
@@ -444,6 +445,7 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
 
     def reset(self):
         self._conf_matrix = np.zeros((self._num_classes + 1, self._num_classes + 1), dtype=np.int64)
+        # self._conf_matrix = np.zeros((192 + 1, 192 + 1), dtype=np.int64)
         self._predictions = []
         self.epe = 0
         self.one_pix_err = 0
@@ -463,18 +465,21 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
             output = output["sem_seg"].to(self._cpu_device).squeeze() #* 4.0
             # output = output["sem_seg"].argmax(dim=0).to(self._cpu_device)+1
             # pred = np.array(output, dtype=np.int)[0]
-            gt = readPFM(self.input_file_to_gt_file[input["file_name"]])[0]
+            gt = read_disparity(self.input_file_to_gt_file[input["file_name"]])
             if len(gt.shape)==3:
                 gt = gt[:,:,0:3]
             # gt = np.array(gt.round(), dtype=np.long)
-            gt = np.array(gt, dtype=np.long) #/4.0
+            gt = np.array(gt, dtype=np.float) #/4.0
             # gt = np.ceil(np.array(gt, dtype=np.long))
             # gt = np.ceil(np.array(gt, dtype=np.long) / 4.0)
             # pred = np.array(output.round(), dtype=np.long) #* 4.0
-            pred = np.array(output, dtype=np.long)
+            pred = np.array(output, dtype=np.float)
 
-            gt[gt > self._num_classes] = 0
-            pred[pred > self._num_classes] = 0
+            # gt[gt > self._num_classes] = 0
+            # pred[pred > self._num_classes] = 0
+
+            gt[gt > 192] = 0
+            pred[pred > 192] = 0
 
             valid_mask = gt > 0
 
@@ -486,16 +491,19 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
                 self.one_pix_err += np.sum(disp_error > 1.0 ) / np.sum(valid_mask)
                 self.three_pix_err += np.sum(disp_error > 3.0 ) / np.sum(valid_mask)
 
-            pred = np.array(torch.round(output), dtype=np.int)
+            pred = np.array(torch.round(output)/4, dtype=np.int)
             
 
-            # gt = np.ceil(np.array(gt, dtype=np.long)) #/ 4.0)
+            gt = np.ceil(gt/4.0)
             gt = gt.astype(np.int)
             # gt = np.array(gt.round(), dtype=np.int)
 
 
             gt[gt > self._num_classes] = 0
             pred[pred > self._num_classes] = 0
+
+            # gt[gt > 192] = 0
+            # pred[pred > 192] = 0
 
             valid_mask = gt > 0
 
@@ -512,6 +520,11 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
                 (self._num_classes + 1) * pred.reshape(-1) + gt.reshape(-1),
                 minlength=self._conf_matrix.size,
             ).reshape(self._conf_matrix.shape)
+
+            # self._conf_matrix += np.bincount(
+            #     (192 + 1) * pred.reshape(-1) + gt.reshape(-1),
+            #     minlength=self._conf_matrix.size,
+            # ).reshape(self._conf_matrix.shape)
 
             self._predictions.extend(self.encode_json_sem_seg(pred, input["file_name"])) 
 
@@ -684,6 +697,76 @@ def load_sceneflow_stereo(image_dir, disp_dir, file_list):
     ), "Disparity map not found"  # noqa
     return ret
 
+
+KITTI_STEREO_SPLITS = {
+    "kitti_train": "/home/Datasets/kitti_stereo_2015/kitti2015_train180.list",
+    "kitti_val": "/home/Datasets/kitti_stereo_2015/kitti2015_val20.list",
+}
+
+def register_kitti_stereo(cfg):
+    root = cfg.DATASETS.ROOT
+    for key, file_list in KITTI_STEREO_SPLITS.items():
+        image_dir = os.path.join(root, 'image_2')
+        disp_dir = os.path.join(root, 'disp_occ_0')
+        max_disp = cfg.MODEL.SEM_SEG_HEAD.NUM_CLASSES
+
+        # set stuff classes metadata
+        stuff_classes = range(1,max_disp+1,1)
+        stuff_classes = [str(label) for label in stuff_classes]
+
+        DatasetCatalog.register(
+            key, lambda x=image_dir, y=disp_dir, z=file_list: load_kitti_stereo(x, y, z)
+        )
+        MetadataCatalog.get(key).set(
+            image_dir=image_dir,
+            gt_dir=disp_dir,
+            ignore_label=0,
+            stuff_classes=stuff_classes,
+        )
+
+def load_kitti_stereo(image_dir, disp_dir, file_list):
+    """
+    Args:
+        image_dir (str): path to the raw dataset. e.g., "~/cityscapes/leftImg8bit/train".
+        disp_dir (str): path to the raw disparity. e.g., "~/cityscapes/disparity/train".
+
+    Returns:
+        list[dict]: a list of dict, each has "file_name", "file_name_right" and
+            "sem_seg_file_name".
+    """
+    ret = []
+    with open(file_list, 'r') as f:
+        img_list = f.read().splitlines()
+
+    for image_file in img_list:
+        left_image_file = os.path.join(image_dir, image_file)
+        if not PathManager.isfile(left_image_file):
+            continue
+        right_image_file = left_image_file.replace('image_2', 'image_3')
+        if not PathManager.isfile(right_image_file):
+            continue
+        disp_file = os.path.join(disp_dir, image_file)
+        if not PathManager.isfile(disp_file):
+            continue
+
+        im = Image.open(left_image_file)
+        (width, height) = im.size
+
+        ret.append(
+            {
+                "file_name": left_image_file,
+                "file_name_right": right_image_file,
+                "sem_seg_file_name": disp_file,
+                "width": width,
+                "height": height
+            }
+        )
+    assert len(ret), f"No images found in {image_dir}!"
+    assert PathManager.isfile(
+        ret[0]["sem_seg_file_name"]
+    ), "Disparity map not found"  # noqa
+    return ret
+
 # def register_sceneflow_stereo(cfg):
 #     root = cfg.DATASETS.ROOT
 #     for key, (image_dir, disp_dir) in SCENEFLOW_STEREO_SPLITS.items():
@@ -806,6 +889,15 @@ def readPFM(file):
     data = np.flipud(data)
     return data, scale
 
+def read_disparity(file):
+    if file.endswith('.png'): 
+        img = Image.open(file)
+        # imgcv = cv2.imread(file, cv2.IMREAD_UNCHANGED).astype(np.float32)/256
+        img = np.asarray(img)/256.0
+        return img
+    elif file.endswith('.pfm'): return readPFM(file)[0]
+    else: raise Exception('don\'t know how to read %s' % file)
+
 
 def setup(args):
     """
@@ -826,8 +918,13 @@ def setup(args):
 
 def main(args):
     cfg = setup(args)
+    if "sceneflow_train" in cfg.DATASETS.TRAIN:
     # register_cityscapes_stereo(cfg.DATASETS.ROOT)
-    register_sceneflow_stereo(cfg)
+        register_sceneflow_stereo(cfg)
+    elif "kitti_train" in cfg.DATASETS.TRAIN:
+        register_kitti_stereo(cfg)
+    else:
+        raise Exception('Dataset not registered') 
 
     if args.eval_only:
         model = Trainer.build_model(cfg)

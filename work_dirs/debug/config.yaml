@@ -80,22 +80,22 @@ MODEL:
   LOAD_PROPOSALS: false
   MASK_FORMER:
     CLASS_WEIGHT: 0.0
-    DEC_LAYERS: 10
+    DEC_LAYERS: 4
     DEEP_SUPERVISION: true
-    DICE_WEIGHT: 0.0
+    DICE_WEIGHT: 1.0
     DIM_FEEDFORWARD: 2048
     DROPOUT: 0.0
     ENC_LAYERS: 0
     ENFORCE_INPUT_PROJ: false
     HIDDEN_DIM: 256
     IMPORTANCE_SAMPLE_RATIO: 0.75
-    MASK_WEIGHT: 0.0
+    MASK_WEIGHT: 5.0
     NHEADS: 8
     NO_OBJECT_WEIGHT: 0.1
     NUM_OBJECT_QUERIES: 48
     OVERSAMPLE_RATIO: 3.0
     PRE_NORM: false
-    SEG_WEIGHT: 1.0
+    SEG_WEIGHT: 0.1
     SIZE_DIVISIBILITY: 32
     TEST:
       INSTANCE_ON: false
@@ -135,7 +135,7 @@ MODEL:
     - false
     - false
     - false
-    DEPTH: 101
+    DEPTH: 50
     NORM: SyncBN
     NUM_GROUPS: 1
     OUT_FEATURES:
@@ -319,7 +319,7 @@ MODEL:
     - 48
     PROJECT_FEATURES:
     - res2
-    TRANSFORMER_ENC_LAYERS: 6
+    TRANSFORMER_ENC_LAYERS: 3
     USE_DEPTHWISE_SEPARABLE_CONV: false
   SWIN:
     APE: false
@@ -350,16 +350,16 @@ MODEL:
     QK_SCALE: null
     USE_CHECKPOINT: false
     WINDOW_SIZE: 7
-  WEIGHTS: /home/nstarli/Mask2Former/work_dirs/r101_48classes_fixedmatching_finesmoothl1_refinement/model_0009999.pth
+  WEIGHTS: /home/nstarli/Mask2Former/work_dirs/r101_48classes_fixedmatching_finesmoothl1_refinelayerdeltas_fpnoutrefine_highmaskweight_smallnetwork/model_0049999.pth
 OUTPUT_DIR: ./work_dirs/debug
 SEED: -1
 SOLVER:
   AMP:
     ENABLED: true
   BACKBONE_MULTIPLIER: 1.0
-  BASE_LR: 1.0e-05
+  BASE_LR: 0.0001
   BIAS_LR_FACTOR: 1.0
-  CHECKPOINT_PERIOD: 5000
+  CHECKPOINT_PERIOD: 2500
   CLIP_GRADIENTS:
     CLIP_TYPE: full_model
     CLIP_VALUE: 0.01
@@ -378,7 +378,7 @@ SOLVER:
   STEPS:
   - 30000
   WARMUP_FACTOR: 0.1
-  WARMUP_ITERS: 1000
+  WARMUP_ITERS: 0
   WARMUP_METHOD: linear
   WEIGHT_DECAY: 0.05
   WEIGHT_DECAY_BIAS: null
@@ -396,7 +396,7 @@ TEST:
     - 672
     - 800
   DETECTIONS_PER_IMAGE: 100
-  EVAL_PERIOD: 2500
+  EVAL_PERIOD: 40
   EXPECTED_RESULTS: []
   KEYPOINT_OKS_SIGMAS: []
   PRECISE_BN:

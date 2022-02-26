@@ -7024,3 +7024,11 @@ MaskFormerStereo(
 [02/17 08:27:52] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: []
 [02/17 08:27:52] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
 [02/17 08:27:52] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[02/17 11:47:08] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: []
+[02/17 11:47:09] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[02/17 11:47:09] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[02/17 15:10:28] detectron2.engine.hooks INFO: Overall training speed: 59998 iterations in 1 day, 13:37:59 (2.2581 s / it)
+[02/17 15:10:28] detectron2.engine.hooks INFO: Total training time: 1 day, 15:05:30 (1:27:30 on hooks)
+[02/17 15:10:28] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: []
+[02/17 15:10:29] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[02/17 15:10:29] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB

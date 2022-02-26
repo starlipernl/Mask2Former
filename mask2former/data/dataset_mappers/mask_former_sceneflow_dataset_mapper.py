@@ -123,10 +123,11 @@ class MaskFormerSceneFlowDatasetMapper:
 
         if "sem_seg_file_name" in dataset_dict:
             # PyTorch transformation not implemented for uint16, so converting it to double first
-            sem_seg_gt = readPFM(dataset_dict.pop("sem_seg_file_name"))[0]
+            sem_seg_gt = read_disparity(dataset_dict.pop("sem_seg_file_name"))
             if len(sem_seg_gt.shape)==3:
                 sem_seg_gt = sem_seg_gt[:,:,0:3]
-            sem_seg_gt = np.array(sem_seg_gt, dtype=np.long) #np.array(sem_seg_gt.round(), dtype=np.uint8) #
+            sem_seg_gt = np.array(sem_seg_gt, dtype=np.float) #np.array(sem_seg_gt.round(), dtype=np.uint8) #
+            sem_seg_gt[sem_seg_gt > 192] = 0
         else:
             sem_seg_gt = None
 
@@ -148,7 +149,7 @@ class MaskFormerSceneFlowDatasetMapper:
         image_left = torch.as_tensor(np.ascontiguousarray(image_left.transpose(2, 0, 1)))
         image_right = torch.as_tensor(np.ascontiguousarray(image_right.transpose(2, 0, 1)))
         if sem_seg_gt is not None:
-            sem_seg_gt = torch.as_tensor(sem_seg_gt.astype("long"))
+            sem_seg_gt = torch.as_tensor(sem_seg_gt) #.astype("long"))
 
         if self.size_divisibility > 0:
             image_size = (image_left.shape[-2], image_left.shape[-1])
@@ -172,7 +173,7 @@ class MaskFormerSceneFlowDatasetMapper:
         dataset_dict["image_right"] = image_right
 
         if sem_seg_gt is not None:
-            dataset_dict["sem_seg"] = sem_seg_gt.long()
+            dataset_dict["sem_seg"] = sem_seg_gt.float()
 
         if "annotations" in dataset_dict:
             raise ValueError("Semantic segmentation dataset should not have 'annotations'.")
@@ -334,3 +335,11 @@ def readPFM(file):
     data = np.reshape(data, shape)
     data = np.flipud(data)
     return data, scale
+
+def read_disparity(file):
+    if file.endswith('.png'): 
+        img = Image.open(file)
+        img = np.asarray(img)/256.0
+        return img
+    elif file.endswith('.pfm'): return readPFM(file)[0]
+    else: raise Exception('don\'t know how to read %s' % file)

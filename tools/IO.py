@@ -9,7 +9,6 @@ import numpy as np
 from PIL import Image
 import sys
 
-
 def read(file):
     if file.endswith('.float3'): return readFloat(file)
     elif file.endswith('.flo'): return readFlow(file)

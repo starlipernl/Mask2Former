@@ -1,0 +1,1735 @@
+[02/25 17:19:11] detectron2 INFO: Rank of current process: 3. World size: 4
+[02/25 17:19:16] detectron2 INFO: Environment info:
+----------------------  ----------------------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.8.12 (default, Oct 12 2021, 13:49:34) [GCC 7.5.0]
+numpy                   1.21.5
+detectron2              0.6 @/home/nstarli/detectron2/detectron2
+Compiler                GCC 7.5
+CUDA compiler           CUDA 11.5
+detectron2 arch flags   7.0
+DETECTRON2_ENV_MODULE   <not set>
+PyTorch                 1.9.0 @/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch
+PyTorch debug build     False
+GPU available           Yes
+GPU 0,1,2,3             Tesla V100-SXM2-32GB (arch=7.0)
+Driver version          495.29.05
+CUDA_HOME               /usr/local/cuda-11
+Pillow                  8.4.0
+torchvision             0.10.0 @/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torchvision
+torchvision arch flags  3.5, 5.0, 6.0, 7.0, 7.5, 8.0, 8.6
+fvcore                  0.1.5.post20211023
+iopath                  0.1.9
+cv2                     4.5.4
+----------------------  ----------------------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) oneAPI Math Kernel Library Version 2021.4-Product Build 20210904 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.1.2 (Git Hash 98be7e8afa711dc9b66c8ff3504129cb82013cdb)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.1
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.0.5
+  - Magma 2.5.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.1, CUDNN_VERSION=8.0.5, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.9.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, 
+
+[02/25 17:19:16] detectron2 INFO: Command line arguments: Namespace(config_file='configs/sceneflow/semantic-segmentation/maskformer2stereo_R50_bs16_90k.yaml', dist_url='tcp://127.0.0.1:65530', eval_only=False, machine_rank=0, num_gpus=4, num_machines=1, opts=[], resume=False)
+[02/25 17:19:16] detectron2 INFO: Contents of args.config_file=configs/sceneflow/semantic-segmentation/maskformer2stereo_R50_bs16_90k.yaml:
+[38;5;197m_BASE_[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mBase-SceneFlow-SemanticSegmentationStereo.yaml[39m
+[38;5;197mMODEL[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mMETA_ARCHITECTURE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMaskFormerStereo[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;197mSEM_SEG_HEAD[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mNAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMaskFormerHead[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mIGNORE_VALUE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0[39m
+[38;5;15m    [39m[38;5;197mNUM_CLASSES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m48[39m
+[38;5;15m    [39m[38;5;197mLOSS_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m1.0[39m
+[38;5;15m    [39m[38;5;197mCONVS_DIM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mMASK_DIM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mNORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mGN[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;242m# pixel decoder[39m
+[38;5;15m    [39m[38;5;197mPIXEL_DECODER_NAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMSDeformAttnPixelDecoder[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mIN_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres2[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mDEFORMABLE_TRANSFORMER_ENCODER_IN_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mCOMMON_STRIDE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m4[39m
+[38;5;15m    [39m[38;5;197mTRANSFORMER_ENC_LAYERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m3[39m
+[38;5;15m  [39m[38;5;197mMASK_FORMER[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mTRANSFORMER_DECODER_NAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMultiScaleMaskedTransformerDecoder[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mTRANSFORMER_IN_FEATURE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mmulti_scale_pixel_decoder[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mDEEP_SUPERVISION[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m
+[38;5;15m    [39m[38;5;197mNO_OBJECT_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m
+[38;5;15m    [39m[38;5;197mCLASS_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.0[39m
+[38;5;15m    [39m[38;5;197mMASK_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m5.0[39m
+[38;5;15m    [39m[38;5;197mDICE_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m1.0[39m
+[38;5;15m    [39m[38;5;197mSEG_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m
+[38;5;15m    [39m[38;5;197mHIDDEN_DIM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mNUM_OBJECT_QUERIES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m48[39m
+[38;5;15m    [39m[38;5;197mNHEADS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m8[39m
+[38;5;15m    [39m[38;5;197mDROPOUT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.0[39m
+[38;5;15m    [39m[38;5;197mDIM_FEEDFORWARD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m2048[39m
+[38;5;15m    [39m[38;5;197mENC_LAYERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0[39m
+[38;5;15m    [39m[38;5;197mPRE_NORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;197mENFORCE_INPUT_PROJ[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;197mSIZE_DIVISIBILITY[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m32[39m
+[38;5;15m    [39m[38;5;197mDEC_LAYERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m4[39m[38;5;15m  [39m[38;5;242m# 9 decoder layers, add one for the loss on learnable query[39m
+[38;5;15m    [39m[38;5;197mTRAIN_NUM_POINTS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m12544[39m
+[38;5;15m    [39m[38;5;197mOVERSAMPLE_RATIO[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m3.0[39m
+[38;5;15m    [39m[38;5;197mIMPORTANCE_SAMPLE_RATIO[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.75[39m
+[38;5;15m    [39m[38;5;197mTEST[39m[38;5;15m:[39m
+[38;5;15m      [39m[38;5;197mSEMANTIC_ON[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m
+[38;5;15m      [39m[38;5;197mINSTANCE_ON[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m      [39m[38;5;197mPANOPTIC_ON[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m      [39m[38;5;197mOVERLAP_THRESHOLD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.8[39m
+[38;5;15m      [39m[38;5;197mOBJECT_MASK_THRESHOLD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.8[39m
+
+[02/25 17:19:16] detectron2.utils.env INFO: Using a generated random seed 16198809
+[02/25 17:19:17] detectron2.engine.defaults INFO: Model:
+MaskFormerStereo(
+  (backbone): ResNet(
+    (stem): BasicStem(
+      (conv1): Conv2d(
+        3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+        (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (res2): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          64, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res3): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (3): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res4): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          512, 1024, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (3): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (4): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (5): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res5): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          1024, 2048, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+  )
+  (sem_seg_head): MaskFormerHead(
+    (pixel_decoder): MSDeformAttnPixelDecoder(
+      (input_proj): ModuleList(
+        (0): Sequential(
+          (0): Conv2d(4096, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+        (1): Sequential(
+          (0): Conv2d(2048, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+        (2): Sequential(
+          (0): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (transformer): MSDeformAttnTransformerEncoderOnly(
+        (encoder): MSDeformAttnTransformerEncoder(
+          (layers): ModuleList(
+            (0): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (1): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (2): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+        )
+      )
+      (pe_layer): Positional encoding PositionEmbeddingSine
+          num_pos_feats: 128
+          temperature: 10000
+          normalize: True
+          scale: 6.283185307179586
+      (mask_features): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+      (adapter_1): Conv2d(
+        512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+        (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+      (layer_1): Conv2d(
+        256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+        (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+    )
+    (predictor): MultiScaleMaskedTransformerDecoder(
+      (pe_layer): Positional encoding PositionEmbeddingSine
+          num_pos_feats: 128
+          temperature: 10000
+          normalize: True
+          scale: 6.283185307179586
+      (transformer_self_attention_layers): ModuleList(
+        (0): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (1): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (2): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+      (transformer_cross_attention_layers): ModuleList(
+        (0): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (1): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (2): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+      (transformer_ffn_layers): ModuleList(
+        (0): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (1): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (2): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+      (decoder_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+      (query_feat): Embedding(48, 256)
+      (query_embed): Embedding(48, 256)
+      (level_embed): Embedding(3, 256)
+      (input_proj): ModuleList(
+        (0): Sequential()
+        (1): Sequential()
+        (2): Sequential()
+      )
+      (class_embed): Linear(in_features=256, out_features=49, bias=True)
+      (mask_embed): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=256, bias=True)
+        )
+      )
+    )
+  )
+  (refinement_layer): DispRefineLayer(
+    (conv2d_feature): Conv2d(
+      257, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)
+      (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+    )
+    (residual_atrous_blocks): ModuleList(
+      (0): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same, dilation=(2, 2)
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (2): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same, dilation=(4, 4)
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (3): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same, dilation=(8, 8)
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (4): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (5): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+    )
+    (conv2d_out): Conv2d(256, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (criterion): Criterion SetCriterionStereo
+      matcher: Matcher FixedMatcher
+      losses: ['labels', 'masks', 'segs']
+      weight_dict: {'loss_mask': 5.0, 'loss_ce': 0.0, 'loss_dice': 1.0, 'loss_seg': 0.1, 'loss_mask_0': 5.0, 'loss_ce_0': 0.0, 'loss_dice_0': 1.0, 'loss_mask_1': 5.0, 'loss_ce_1': 0.0, 'loss_dice_1': 1.0, 'loss_mask_2': 5.0, 'loss_ce_2': 0.0, 'loss_dice_2': 1.0}
+      num_classes: 48
+      eos_coef: 0.1
+      num_points: 12544
+      oversample_ratio: 3.0
+      importance_sample_ratio: 0.75
+)
+[02/25 17:19:17] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in training: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[02/25 17:19:23] detectron2.data.build INFO: Using training sampler TrainingSampler
+[02/25 17:19:25] detectron2.data.common INFO: Serializing 35454 elements to byte tensors and concatenating them all ...
+[02/25 17:19:25] detectron2.data.common INFO: Serialized dataset takes 10.76 MiB
+[02/25 17:19:25] fvcore.common.checkpoint INFO: [Checkpointer] Loading from detectron2://ImageNetPretrained/torchvision/R-50.pkl ...
+[02/25 17:19:25] fvcore.common.checkpoint INFO: Reading a file from 'torchvision'
+[02/25 17:19:25] detectron2.checkpoint.c2_model_loading INFO: Following weights matched with submodule backbone:
+| Names in Model    | Names in Checkpoint                                                               | Shapes                                          |
+|:------------------|:----------------------------------------------------------------------------------|:------------------------------------------------|
+| res2.0.conv1.*    | res2.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,1,1)             |
+| res2.0.conv2.*    | res2.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.0.conv3.*    | res2.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.0.shortcut.* | res2.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.1.conv1.*    | res2.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,256,1,1)            |
+| res2.1.conv2.*    | res2.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.1.conv3.*    | res2.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.2.conv1.*    | res2.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,256,1,1)            |
+| res2.2.conv2.*    | res2.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.2.conv3.*    | res2.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res3.0.conv1.*    | res3.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,256,1,1)       |
+| res3.0.conv2.*    | res3.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.0.conv3.*    | res3.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.0.shortcut.* | res3.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (512,) (512,) (512,) (512,) (512,256,1,1)       |
+| res3.1.conv1.*    | res3.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.1.conv2.*    | res3.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.1.conv3.*    | res3.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.2.conv1.*    | res3.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.2.conv2.*    | res3.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.2.conv3.*    | res3.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.3.conv1.*    | res3.3.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.3.conv2.*    | res3.3.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.3.conv3.*    | res3.3.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res4.0.conv1.*    | res4.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,512,1,1)       |
+| res4.0.conv2.*    | res4.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.0.conv3.*    | res4.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.0.shortcut.* | res4.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (1024,) (1024,) (1024,) (1024,) (1024,512,1,1)  |
+| res4.1.conv1.*    | res4.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.1.conv2.*    | res4.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.1.conv3.*    | res4.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.2.conv1.*    | res4.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.2.conv2.*    | res4.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.2.conv3.*    | res4.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.3.conv1.*    | res4.3.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.3.conv2.*    | res4.3.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.3.conv3.*    | res4.3.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.4.conv1.*    | res4.4.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.4.conv2.*    | res4.4.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.4.conv3.*    | res4.4.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.5.conv1.*    | res4.5.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.5.conv2.*    | res4.5.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.5.conv3.*    | res4.5.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res5.0.conv1.*    | res5.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,1024,1,1)      |
+| res5.0.conv2.*    | res5.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.0.conv3.*    | res5.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| res5.0.shortcut.* | res5.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (2048,) (2048,) (2048,) (2048,) (2048,1024,1,1) |
+| res5.1.conv1.*    | res5.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,2048,1,1)      |
+| res5.1.conv2.*    | res5.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.1.conv3.*    | res5.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| res5.2.conv1.*    | res5.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,2048,1,1)      |
+| res5.2.conv2.*    | res5.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.2.conv3.*    | res5.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| stem.conv1.*      | stem.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}      | (64,) (64,) (64,) (64,) (64,3,7,7)              |
+[02/25 17:19:26] fvcore.common.checkpoint WARNING: Some model parameters or buffers are not found in the checkpoint:
+[34mcriterion.empty_weight[0m
+[34mrefinement_layer.conv2d_feature.norm.{bias, weight}[0m
+[34mrefinement_layer.conv2d_feature.{bias, weight}[0m
+[34mrefinement_layer.conv2d_out.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.0.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.0.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.1.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.1.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.2.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.2.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.3.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.3.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.4.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.4.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.5.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.5.conv1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.adapter_1.norm.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.adapter_1.weight[0m
+[34msem_seg_head.pixel_decoder.input_proj.0.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.0.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.1.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.1.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.2.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.2.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.layer_1.norm.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.layer_1.weight[0m
+[34msem_seg_head.pixel_decoder.mask_features.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.level_embed[0m
+[34msem_seg_head.predictor.class_embed.{bias, weight}[0m
+[34msem_seg_head.predictor.decoder_norm.{bias, weight}[0m
+[34msem_seg_head.predictor.level_embed.weight[0m
+[34msem_seg_head.predictor.mask_embed.layers.0.{bias, weight}[0m
+[34msem_seg_head.predictor.mask_embed.layers.1.{bias, weight}[0m
+[34msem_seg_head.predictor.mask_embed.layers.2.{bias, weight}[0m
+[34msem_seg_head.predictor.query_embed.weight[0m
+[34msem_seg_head.predictor.query_feat.weight[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.self_attn.{in_proj_bias, in_proj_weight}[0m
+[02/25 17:19:26] fvcore.common.checkpoint WARNING: The checkpoint state_dict contains keys that are not used by the model:
+  [35mstem.fc.{bias, weight}[0m
+[02/25 17:19:26] detectron2.engine.train_loop INFO: Starting training from iteration 0
+[02/25 17:19:37] detectron2.engine.train_loop ERROR: Exception during training:
+Traceback (most recent call last):
+  File "/home/nstarli/detectron2/detectron2/engine/train_loop.py", line 149, in train
+    self.run_step()
+  File "/home/nstarli/detectron2/detectron2/engine/defaults.py", line 494, in run_step
+    self._trainer.run_step()
+  File "/home/nstarli/detectron2/detectron2/engine/train_loop.py", line 395, in run_step
+    loss_dict = self.model(data)
+  File "/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 799, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nstarli/Mask2Former/mask2former/maskformer_model_stereo.py", line 754, in forward
+    outputs['pred_seg'] = self.refinement_layer(features['res2'], outputs['pred_seg'])
+  File "/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nstarli/Mask2Former/mask2former/maskformer_model_stereo.py", line 518, in forward
+    output = self.conv2d_feature(
+  File "/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/nstarli/detectron2/detectron2/layers/wrappers.py", line 106, in forward
+    x = F.conv2d(
+RuntimeError: Given groups=1, weight of size [256, 257, 3, 3], expected input[4, 513, 64, 128] to have 257 channels, but got 513 channels instead
+[02/25 17:19:37] detectron2.engine.hooks INFO: Total training time: 0:00:11 (0:00:00 on hooks)
+[02/25 17:21:20] detectron2 INFO: Rank of current process: 3. World size: 4
+[02/25 17:21:25] detectron2 INFO: Environment info:
+----------------------  ----------------------------------------------------------------------------------------
+sys.platform            linux
+Python                  3.8.12 (default, Oct 12 2021, 13:49:34) [GCC 7.5.0]
+numpy                   1.21.5
+detectron2              0.6 @/home/nstarli/detectron2/detectron2
+Compiler                GCC 7.5
+CUDA compiler           CUDA 11.5
+detectron2 arch flags   7.0
+DETECTRON2_ENV_MODULE   <not set>
+PyTorch                 1.9.0 @/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torch
+PyTorch debug build     False
+GPU available           Yes
+GPU 0,1,2,3             Tesla V100-SXM2-32GB (arch=7.0)
+Driver version          495.29.05
+CUDA_HOME               /usr/local/cuda-11
+Pillow                  8.4.0
+torchvision             0.10.0 @/home/nstarli/anaconda3/envs/mask2former/lib/python3.8/site-packages/torchvision
+torchvision arch flags  3.5, 5.0, 6.0, 7.0, 7.5, 8.0, 8.6
+fvcore                  0.1.5.post20211023
+iopath                  0.1.9
+cv2                     4.5.4
+----------------------  ----------------------------------------------------------------------------------------
+PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) oneAPI Math Kernel Library Version 2021.4-Product Build 20210904 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.1.2 (Git Hash 98be7e8afa711dc9b66c8ff3504129cb82013cdb)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.1
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.0.5
+  - Magma 2.5.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.1, CUDNN_VERSION=8.0.5, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.9.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, 
+
+[02/25 17:21:25] detectron2 INFO: Command line arguments: Namespace(config_file='configs/sceneflow/semantic-segmentation/maskformer2stereo_R50_bs16_90k.yaml', dist_url='tcp://127.0.0.1:65530', eval_only=False, machine_rank=0, num_gpus=4, num_machines=1, opts=[], resume=False)
+[02/25 17:21:25] detectron2 INFO: Contents of args.config_file=configs/sceneflow/semantic-segmentation/maskformer2stereo_R50_bs16_90k.yaml:
+[38;5;197m_BASE_[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mBase-SceneFlow-SemanticSegmentationStereo.yaml[39m
+[38;5;197mMODEL[39m[38;5;15m:[39m
+[38;5;15m  [39m[38;5;197mMETA_ARCHITECTURE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMaskFormerStereo[39m[38;5;186m"[39m
+[38;5;15m  [39m[38;5;197mSEM_SEG_HEAD[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mNAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMaskFormerHead[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mIGNORE_VALUE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0[39m
+[38;5;15m    [39m[38;5;197mNUM_CLASSES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m48[39m
+[38;5;15m    [39m[38;5;197mLOSS_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m1.0[39m
+[38;5;15m    [39m[38;5;197mCONVS_DIM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mMASK_DIM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mNORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mGN[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;242m# pixel decoder[39m
+[38;5;15m    [39m[38;5;197mPIXEL_DECODER_NAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMSDeformAttnPixelDecoder[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mIN_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres2[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mDEFORMABLE_TRANSFORMER_ENCODER_IN_FEATURES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;15m[[39m[38;5;186m"[39m[38;5;186mres3[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres4[39m[38;5;186m"[39m[38;5;15m,[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mres5[39m[38;5;186m"[39m[38;5;15m][39m
+[38;5;15m    [39m[38;5;197mCOMMON_STRIDE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m4[39m
+[38;5;15m    [39m[38;5;197mTRANSFORMER_ENC_LAYERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m3[39m
+[38;5;15m  [39m[38;5;197mMASK_FORMER[39m[38;5;15m:[39m
+[38;5;15m    [39m[38;5;197mTRANSFORMER_DECODER_NAME[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mMultiScaleMaskedTransformerDecoder[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mTRANSFORMER_IN_FEATURE[39m[38;5;15m:[39m[38;5;15m [39m[38;5;186m"[39m[38;5;186mmulti_scale_pixel_decoder[39m[38;5;186m"[39m
+[38;5;15m    [39m[38;5;197mDEEP_SUPERVISION[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m
+[38;5;15m    [39m[38;5;197mNO_OBJECT_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m
+[38;5;15m    [39m[38;5;197mCLASS_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.0[39m
+[38;5;15m    [39m[38;5;197mMASK_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m5.0[39m
+[38;5;15m    [39m[38;5;197mDICE_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m1.0[39m
+[38;5;15m    [39m[38;5;197mSEG_WEIGHT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.1[39m
+[38;5;15m    [39m[38;5;197mHIDDEN_DIM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m256[39m
+[38;5;15m    [39m[38;5;197mNUM_OBJECT_QUERIES[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m48[39m
+[38;5;15m    [39m[38;5;197mNHEADS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m8[39m
+[38;5;15m    [39m[38;5;197mDROPOUT[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.0[39m
+[38;5;15m    [39m[38;5;197mDIM_FEEDFORWARD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m2048[39m
+[38;5;15m    [39m[38;5;197mENC_LAYERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0[39m
+[38;5;15m    [39m[38;5;197mPRE_NORM[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;197mENFORCE_INPUT_PROJ[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m    [39m[38;5;197mSIZE_DIVISIBILITY[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m32[39m
+[38;5;15m    [39m[38;5;197mDEC_LAYERS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m4[39m[38;5;15m  [39m[38;5;242m# 9 decoder layers, add one for the loss on learnable query[39m
+[38;5;15m    [39m[38;5;197mTRAIN_NUM_POINTS[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m12544[39m
+[38;5;15m    [39m[38;5;197mOVERSAMPLE_RATIO[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m3.0[39m
+[38;5;15m    [39m[38;5;197mIMPORTANCE_SAMPLE_RATIO[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.75[39m
+[38;5;15m    [39m[38;5;197mTEST[39m[38;5;15m:[39m
+[38;5;15m      [39m[38;5;197mSEMANTIC_ON[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mTrue[39m
+[38;5;15m      [39m[38;5;197mINSTANCE_ON[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m      [39m[38;5;197mPANOPTIC_ON[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141mFalse[39m
+[38;5;15m      [39m[38;5;197mOVERLAP_THRESHOLD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.8[39m
+[38;5;15m      [39m[38;5;197mOBJECT_MASK_THRESHOLD[39m[38;5;15m:[39m[38;5;15m [39m[38;5;141m0.8[39m
+
+[02/25 17:21:25] detectron2.utils.env INFO: Using a generated random seed 25541800
+[02/25 17:21:27] detectron2.engine.defaults INFO: Model:
+MaskFormerStereo(
+  (backbone): ResNet(
+    (stem): BasicStem(
+      (conv1): Conv2d(
+        3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+        (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (res2): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          64, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          256, 64, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          64, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res3): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (3): BottleneckBlock(
+        (conv1): Conv2d(
+          512, 128, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res4): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          512, 1024, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (3): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (4): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (5): BottleneckBlock(
+        (conv1): Conv2d(
+          1024, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          256, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+    (res5): Sequential(
+      (0): BottleneckBlock(
+        (shortcut): Conv2d(
+          1024, 2048, kernel_size=(1, 1), stride=(2, 2), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv1): Conv2d(
+          1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BottleneckBlock(
+        (conv1): Conv2d(
+          2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (2): BottleneckBlock(
+        (conv1): Conv2d(
+          2048, 512, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv2): Conv2d(
+          512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+          (norm): SyncBatchNorm(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (conv3): Conv2d(
+          512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False
+          (norm): SyncBatchNorm(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+    )
+  )
+  (sem_seg_head): MaskFormerHead(
+    (pixel_decoder): MSDeformAttnPixelDecoder(
+      (input_proj): ModuleList(
+        (0): Sequential(
+          (0): Conv2d(4096, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+        (1): Sequential(
+          (0): Conv2d(2048, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+        (2): Sequential(
+          (0): Conv2d(1024, 256, kernel_size=(1, 1), stride=(1, 1))
+          (1): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (transformer): MSDeformAttnTransformerEncoderOnly(
+        (encoder): MSDeformAttnTransformerEncoder(
+          (layers): ModuleList(
+            (0): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (1): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+            (2): MSDeformAttnTransformerEncoderLayer(
+              (self_attn): MSDeformAttn(
+                (sampling_offsets): Linear(in_features=256, out_features=192, bias=True)
+                (attention_weights): Linear(in_features=256, out_features=96, bias=True)
+                (value_proj): Linear(in_features=256, out_features=256, bias=True)
+                (output_proj): Linear(in_features=256, out_features=256, bias=True)
+              )
+              (dropout1): Dropout(p=0.0, inplace=False)
+              (norm1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+              (linear1): Linear(in_features=256, out_features=1024, bias=True)
+              (dropout2): Dropout(p=0.0, inplace=False)
+              (linear2): Linear(in_features=1024, out_features=256, bias=True)
+              (dropout3): Dropout(p=0.0, inplace=False)
+              (norm2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+        )
+      )
+      (pe_layer): Positional encoding PositionEmbeddingSine
+          num_pos_feats: 128
+          temperature: 10000
+          normalize: True
+          scale: 6.283185307179586
+      (mask_features): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+      (adapter_1): Conv2d(
+        512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False
+        (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+      (layer_1): Conv2d(
+        256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+        (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+      )
+    )
+    (predictor): MultiScaleMaskedTransformerDecoder(
+      (pe_layer): Positional encoding PositionEmbeddingSine
+          num_pos_feats: 128
+          temperature: 10000
+          normalize: True
+          scale: 6.283185307179586
+      (transformer_self_attention_layers): ModuleList(
+        (0): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (1): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (2): SelfAttentionLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+      (transformer_cross_attention_layers): ModuleList(
+        (0): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (1): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (2): CrossAttentionLayer(
+          (multihead_attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=256, out_features=256, bias=True)
+          )
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+      )
+      (transformer_ffn_layers): ModuleList(
+        (0): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (1): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+        (2): FFNLayer(
+          (linear1): Linear(in_features=256, out_features=2048, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (linear2): Linear(in_features=2048, out_features=256, bias=True)
+          (norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+      (decoder_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+      (query_feat): Embedding(48, 256)
+      (query_embed): Embedding(48, 256)
+      (level_embed): Embedding(3, 256)
+      (input_proj): ModuleList(
+        (0): Sequential()
+        (1): Sequential()
+        (2): Sequential()
+      )
+      (class_embed): Linear(in_features=256, out_features=49, bias=True)
+      (mask_embed): MLP(
+        (layers): ModuleList(
+          (0): Linear(in_features=256, out_features=256, bias=True)
+          (1): Linear(in_features=256, out_features=256, bias=True)
+          (2): Linear(in_features=256, out_features=256, bias=True)
+        )
+      )
+    )
+  )
+  (refinement_layer): DispRefineLayer(
+    (conv2d_feature): Conv2d(
+      513, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)
+      (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+    )
+    (residual_atrous_blocks): ModuleList(
+      (0): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same, dilation=(2, 2)
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (2): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same, dilation=(4, 4)
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (3): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same, dilation=(8, 8)
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (4): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+      (5): BasicBlock(
+        (conv1): Conv2d(
+          256, 256, kernel_size=(3, 3), stride=(1, 1), padding=same
+          (norm): GroupNorm(32, 256, eps=1e-05, affine=True)
+        )
+      )
+    )
+    (conv2d_out): Conv2d(256, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (criterion): Criterion SetCriterionStereo
+      matcher: Matcher FixedMatcher
+      losses: ['labels', 'masks', 'segs']
+      weight_dict: {'loss_mask': 5.0, 'loss_ce': 0.0, 'loss_dice': 1.0, 'loss_seg': 0.1, 'loss_mask_0': 5.0, 'loss_ce_0': 0.0, 'loss_dice_0': 1.0, 'loss_mask_1': 5.0, 'loss_ce_1': 0.0, 'loss_dice_1': 1.0, 'loss_mask_2': 5.0, 'loss_ce_2': 0.0, 'loss_dice_2': 1.0}
+      num_classes: 48
+      eos_coef: 0.1
+      num_points: 12544
+      oversample_ratio: 3.0
+      importance_sample_ratio: 0.75
+)
+[02/25 17:21:27] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in training: [RandomCrop_CategoryAreaConstraint(crop_type='absolute', crop_size=[256, 512], single_category_max_area=1.0, ignored_category=0)]
+[02/25 17:21:33] detectron2.data.build INFO: Using training sampler TrainingSampler
+[02/25 17:21:34] detectron2.data.common INFO: Serializing 35454 elements to byte tensors and concatenating them all ...
+[02/25 17:21:34] detectron2.data.common INFO: Serialized dataset takes 10.76 MiB
+[02/25 17:21:34] fvcore.common.checkpoint INFO: [Checkpointer] Loading from detectron2://ImageNetPretrained/torchvision/R-50.pkl ...
+[02/25 17:21:34] fvcore.common.checkpoint INFO: Reading a file from 'torchvision'
+[02/25 17:21:34] detectron2.checkpoint.c2_model_loading INFO: Following weights matched with submodule backbone:
+| Names in Model    | Names in Checkpoint                                                               | Shapes                                          |
+|:------------------|:----------------------------------------------------------------------------------|:------------------------------------------------|
+| res2.0.conv1.*    | res2.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,1,1)             |
+| res2.0.conv2.*    | res2.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.0.conv3.*    | res2.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.0.shortcut.* | res2.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.1.conv1.*    | res2.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,256,1,1)            |
+| res2.1.conv2.*    | res2.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.1.conv3.*    | res2.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res2.2.conv1.*    | res2.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,256,1,1)            |
+| res2.2.conv2.*    | res2.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (64,) (64,) (64,) (64,) (64,64,3,3)             |
+| res2.2.conv3.*    | res2.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,64,1,1)        |
+| res3.0.conv1.*    | res3.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,256,1,1)       |
+| res3.0.conv2.*    | res3.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.0.conv3.*    | res3.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.0.shortcut.* | res3.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (512,) (512,) (512,) (512,) (512,256,1,1)       |
+| res3.1.conv1.*    | res3.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.1.conv2.*    | res3.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.1.conv3.*    | res3.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.2.conv1.*    | res3.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.2.conv2.*    | res3.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.2.conv3.*    | res3.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res3.3.conv1.*    | res3.3.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,512,1,1)       |
+| res3.3.conv2.*    | res3.3.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (128,) (128,) (128,) (128,) (128,128,3,3)       |
+| res3.3.conv3.*    | res3.3.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,128,1,1)       |
+| res4.0.conv1.*    | res4.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,512,1,1)       |
+| res4.0.conv2.*    | res4.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.0.conv3.*    | res4.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.0.shortcut.* | res4.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (1024,) (1024,) (1024,) (1024,) (1024,512,1,1)  |
+| res4.1.conv1.*    | res4.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.1.conv2.*    | res4.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.1.conv3.*    | res4.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.2.conv1.*    | res4.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.2.conv2.*    | res4.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.2.conv3.*    | res4.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.3.conv1.*    | res4.3.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.3.conv2.*    | res4.3.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.3.conv3.*    | res4.3.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.4.conv1.*    | res4.4.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.4.conv2.*    | res4.4.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.4.conv3.*    | res4.4.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res4.5.conv1.*    | res4.5.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,1024,1,1)      |
+| res4.5.conv2.*    | res4.5.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (256,) (256,) (256,) (256,) (256,256,3,3)       |
+| res4.5.conv3.*    | res4.5.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (1024,) (1024,) (1024,) (1024,) (1024,256,1,1)  |
+| res5.0.conv1.*    | res5.0.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,1024,1,1)      |
+| res5.0.conv2.*    | res5.0.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.0.conv3.*    | res5.0.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| res5.0.shortcut.* | res5.0.shortcut.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight} | (2048,) (2048,) (2048,) (2048,) (2048,1024,1,1) |
+| res5.1.conv1.*    | res5.1.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,2048,1,1)      |
+| res5.1.conv2.*    | res5.1.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.1.conv3.*    | res5.1.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| res5.2.conv1.*    | res5.2.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,2048,1,1)      |
+| res5.2.conv2.*    | res5.2.conv2.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (512,) (512,) (512,) (512,) (512,512,3,3)       |
+| res5.2.conv3.*    | res5.2.conv3.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}    | (2048,) (2048,) (2048,) (2048,) (2048,512,1,1)  |
+| stem.conv1.*      | stem.conv1.{norm.bias,norm.running_mean,norm.running_var,norm.weight,weight}      | (64,) (64,) (64,) (64,) (64,3,7,7)              |
+[02/25 17:21:35] fvcore.common.checkpoint WARNING: Some model parameters or buffers are not found in the checkpoint:
+[34mcriterion.empty_weight[0m
+[34mrefinement_layer.conv2d_feature.norm.{bias, weight}[0m
+[34mrefinement_layer.conv2d_feature.{bias, weight}[0m
+[34mrefinement_layer.conv2d_out.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.0.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.0.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.1.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.1.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.2.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.2.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.3.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.3.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.4.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.4.conv1.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.5.conv1.norm.{bias, weight}[0m
+[34mrefinement_layer.residual_atrous_blocks.5.conv1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.adapter_1.norm.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.adapter_1.weight[0m
+[34msem_seg_head.pixel_decoder.input_proj.0.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.0.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.1.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.1.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.2.0.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.input_proj.2.1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.layer_1.norm.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.layer_1.weight[0m
+[34msem_seg_head.pixel_decoder.mask_features.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.0.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.1.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.linear1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.linear2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.norm1.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.norm2.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.attention_weights.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.output_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.sampling_offsets.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.encoder.layers.2.self_attn.value_proj.{bias, weight}[0m
+[34msem_seg_head.pixel_decoder.transformer.level_embed[0m
+[34msem_seg_head.predictor.class_embed.{bias, weight}[0m
+[34msem_seg_head.predictor.decoder_norm.{bias, weight}[0m
+[34msem_seg_head.predictor.level_embed.weight[0m
+[34msem_seg_head.predictor.mask_embed.layers.0.{bias, weight}[0m
+[34msem_seg_head.predictor.mask_embed.layers.1.{bias, weight}[0m
+[34msem_seg_head.predictor.mask_embed.layers.2.{bias, weight}[0m
+[34msem_seg_head.predictor.query_embed.weight[0m
+[34msem_seg_head.predictor.query_feat.weight[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.multihead_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.multihead_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_cross_attention_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.linear1.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.linear2.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_ffn_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.0.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.1.self_attn.{in_proj_bias, in_proj_weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.norm.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.self_attn.out_proj.{bias, weight}[0m
+[34msem_seg_head.predictor.transformer_self_attention_layers.2.self_attn.{in_proj_bias, in_proj_weight}[0m
+[02/25 17:21:35] fvcore.common.checkpoint WARNING: The checkpoint state_dict contains keys that are not used by the model:
+  [35mstem.fc.{bias, weight}[0m
+[02/25 17:21:35] detectron2.engine.train_loop INFO: Starting training from iteration 0
+[02/25 18:10:06] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: []
+[02/25 18:10:07] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[02/25 18:10:07] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[02/25 18:10:22] mask2former INFO: Inference done 11/1092. Dataloading: 0.0094 s/iter. Inference: 0.2324 s/iter. Eval: 0.1513 s/iter. Total: 0.3931 s/iter. ETA=0:07:04
+[02/25 18:10:27] mask2former INFO: Inference done 25/1092. Dataloading: 0.0071 s/iter. Inference: 0.2334 s/iter. Eval: 0.1306 s/iter. Total: 0.3712 s/iter. ETA=0:06:36
+[02/25 18:10:32] mask2former INFO: Inference done 38/1092. Dataloading: 0.0069 s/iter. Inference: 0.2324 s/iter. Eval: 0.1422 s/iter. Total: 0.3816 s/iter. ETA=0:06:42
+[02/25 18:10:37] mask2former INFO: Inference done 52/1092. Dataloading: 0.0072 s/iter. Inference: 0.2282 s/iter. Eval: 0.1399 s/iter. Total: 0.3755 s/iter. ETA=0:06:30
+[02/25 18:10:42] mask2former INFO: Inference done 65/1092. Dataloading: 0.0069 s/iter. Inference: 0.2302 s/iter. Eval: 0.1405 s/iter. Total: 0.3777 s/iter. ETA=0:06:27
+[02/25 18:10:47] mask2former INFO: Inference done 79/1092. Dataloading: 0.0068 s/iter. Inference: 0.2278 s/iter. Eval: 0.1442 s/iter. Total: 0.3789 s/iter. ETA=0:06:23
+[02/25 18:10:53] mask2former INFO: Inference done 92/1092. Dataloading: 0.0070 s/iter. Inference: 0.2262 s/iter. Eval: 0.1480 s/iter. Total: 0.3813 s/iter. ETA=0:06:21
+[02/25 18:10:58] mask2former INFO: Inference done 106/1092. Dataloading: 0.0072 s/iter. Inference: 0.2276 s/iter. Eval: 0.1453 s/iter. Total: 0.3802 s/iter. ETA=0:06:14
+[02/25 18:11:03] mask2former INFO: Inference done 118/1092. Dataloading: 0.0071 s/iter. Inference: 0.2294 s/iter. Eval: 0.1491 s/iter. Total: 0.3857 s/iter. ETA=0:06:15
+[02/25 18:11:08] mask2former INFO: Inference done 131/1092. Dataloading: 0.0072 s/iter. Inference: 0.2289 s/iter. Eval: 0.1509 s/iter. Total: 0.3871 s/iter. ETA=0:06:12
+[02/25 18:11:14] mask2former INFO: Inference done 144/1092. Dataloading: 0.0071 s/iter. Inference: 0.2275 s/iter. Eval: 0.1545 s/iter. Total: 0.3892 s/iter. ETA=0:06:08
+[02/25 18:11:19] mask2former INFO: Inference done 158/1092. Dataloading: 0.0075 s/iter. Inference: 0.2278 s/iter. Eval: 0.1521 s/iter. Total: 0.3875 s/iter. ETA=0:06:01
+[02/25 18:11:24] mask2former INFO: Inference done 172/1092. Dataloading: 0.0076 s/iter. Inference: 0.2275 s/iter. Eval: 0.1501 s/iter. Total: 0.3853 s/iter. ETA=0:05:54
+[02/25 18:11:29] mask2former INFO: Inference done 184/1092. Dataloading: 0.0076 s/iter. Inference: 0.2286 s/iter. Eval: 0.1515 s/iter. Total: 0.3879 s/iter. ETA=0:05:52
+[02/25 18:11:34] mask2former INFO: Inference done 197/1092. Dataloading: 0.0076 s/iter. Inference: 0.2292 s/iter. Eval: 0.1531 s/iter. Total: 0.3901 s/iter. ETA=0:05:49
+[02/25 18:11:40] mask2former INFO: Inference done 211/1092. Dataloading: 0.0076 s/iter. Inference: 0.2285 s/iter. Eval: 0.1526 s/iter. Total: 0.3888 s/iter. ETA=0:05:42
+[02/25 18:11:45] mask2former INFO: Inference done 224/1092. Dataloading: 0.0075 s/iter. Inference: 0.2295 s/iter. Eval: 0.1532 s/iter. Total: 0.3904 s/iter. ETA=0:05:38
+[02/25 18:11:50] mask2former INFO: Inference done 236/1092. Dataloading: 0.0077 s/iter. Inference: 0.2298 s/iter. Eval: 0.1550 s/iter. Total: 0.3926 s/iter. ETA=0:05:36
+[02/25 18:11:55] mask2former INFO: Inference done 248/1092. Dataloading: 0.0077 s/iter. Inference: 0.2298 s/iter. Eval: 0.1569 s/iter. Total: 0.3945 s/iter. ETA=0:05:32
+[02/25 18:12:01] mask2former INFO: Inference done 261/1092. Dataloading: 0.0076 s/iter. Inference: 0.2312 s/iter. Eval: 0.1560 s/iter. Total: 0.3950 s/iter. ETA=0:05:28
+[02/25 18:12:06] mask2former INFO: Inference done 274/1092. Dataloading: 0.0076 s/iter. Inference: 0.2316 s/iter. Eval: 0.1564 s/iter. Total: 0.3957 s/iter. ETA=0:05:23
+[02/25 18:12:11] mask2former INFO: Inference done 287/1092. Dataloading: 0.0075 s/iter. Inference: 0.2313 s/iter. Eval: 0.1566 s/iter. Total: 0.3956 s/iter. ETA=0:05:18
+[02/25 18:12:16] mask2former INFO: Inference done 299/1092. Dataloading: 0.0076 s/iter. Inference: 0.2330 s/iter. Eval: 0.1568 s/iter. Total: 0.3975 s/iter. ETA=0:05:15
+[02/25 18:12:21] mask2former INFO: Inference done 312/1092. Dataloading: 0.0076 s/iter. Inference: 0.2327 s/iter. Eval: 0.1568 s/iter. Total: 0.3972 s/iter. ETA=0:05:09
+[02/25 18:12:27] mask2former INFO: Inference done 325/1092. Dataloading: 0.0075 s/iter. Inference: 0.2327 s/iter. Eval: 0.1573 s/iter. Total: 0.3978 s/iter. ETA=0:05:05
+[02/25 18:12:32] mask2former INFO: Inference done 337/1092. Dataloading: 0.0075 s/iter. Inference: 0.2330 s/iter. Eval: 0.1578 s/iter. Total: 0.3985 s/iter. ETA=0:05:00
+[02/25 18:12:37] mask2former INFO: Inference done 350/1092. Dataloading: 0.0075 s/iter. Inference: 0.2331 s/iter. Eval: 0.1575 s/iter. Total: 0.3983 s/iter. ETA=0:04:55
+[02/25 18:12:42] mask2former INFO: Inference done 361/1092. Dataloading: 0.0075 s/iter. Inference: 0.2338 s/iter. Eval: 0.1586 s/iter. Total: 0.4001 s/iter. ETA=0:04:52
+[02/25 18:12:47] mask2former INFO: Inference done 375/1092. Dataloading: 0.0075 s/iter. Inference: 0.2334 s/iter. Eval: 0.1585 s/iter. Total: 0.3995 s/iter. ETA=0:04:46
+[02/25 18:12:52] mask2former INFO: Inference done 388/1092. Dataloading: 0.0075 s/iter. Inference: 0.2337 s/iter. Eval: 0.1580 s/iter. Total: 0.3994 s/iter. ETA=0:04:41
+[02/25 18:12:57] mask2former INFO: Inference done 402/1092. Dataloading: 0.0075 s/iter. Inference: 0.2333 s/iter. Eval: 0.1571 s/iter. Total: 0.3981 s/iter. ETA=0:04:34
+[02/25 18:13:03] mask2former INFO: Inference done 415/1092. Dataloading: 0.0075 s/iter. Inference: 0.2332 s/iter. Eval: 0.1570 s/iter. Total: 0.3979 s/iter. ETA=0:04:29
+[02/25 18:13:08] mask2former INFO: Inference done 427/1092. Dataloading: 0.0075 s/iter. Inference: 0.2336 s/iter. Eval: 0.1582 s/iter. Total: 0.3995 s/iter. ETA=0:04:25
+[02/25 18:13:13] mask2former INFO: Inference done 440/1092. Dataloading: 0.0076 s/iter. Inference: 0.2336 s/iter. Eval: 0.1579 s/iter. Total: 0.3993 s/iter. ETA=0:04:20
+[02/25 18:13:18] mask2former INFO: Inference done 453/1092. Dataloading: 0.0076 s/iter. Inference: 0.2334 s/iter. Eval: 0.1582 s/iter. Total: 0.3993 s/iter. ETA=0:04:15
+[02/25 18:13:23] mask2former INFO: Inference done 465/1092. Dataloading: 0.0077 s/iter. Inference: 0.2344 s/iter. Eval: 0.1578 s/iter. Total: 0.4000 s/iter. ETA=0:04:10
+[02/25 18:13:29] mask2former INFO: Inference done 479/1092. Dataloading: 0.0076 s/iter. Inference: 0.2341 s/iter. Eval: 0.1573 s/iter. Total: 0.3992 s/iter. ETA=0:04:04
+[02/25 18:13:34] mask2former INFO: Inference done 492/1092. Dataloading: 0.0075 s/iter. Inference: 0.2337 s/iter. Eval: 0.1574 s/iter. Total: 0.3988 s/iter. ETA=0:03:59
+[02/25 18:13:39] mask2former INFO: Inference done 504/1092. Dataloading: 0.0076 s/iter. Inference: 0.2335 s/iter. Eval: 0.1588 s/iter. Total: 0.4000 s/iter. ETA=0:03:55
+[02/25 18:13:44] mask2former INFO: Inference done 519/1092. Dataloading: 0.0076 s/iter. Inference: 0.2331 s/iter. Eval: 0.1575 s/iter. Total: 0.3984 s/iter. ETA=0:03:48
+[02/25 18:13:49] mask2former INFO: Inference done 532/1092. Dataloading: 0.0076 s/iter. Inference: 0.2331 s/iter. Eval: 0.1578 s/iter. Total: 0.3986 s/iter. ETA=0:03:43
+[02/25 18:13:55] mask2former INFO: Inference done 545/1092. Dataloading: 0.0077 s/iter. Inference: 0.2329 s/iter. Eval: 0.1579 s/iter. Total: 0.3985 s/iter. ETA=0:03:37
+[02/25 18:14:00] mask2former INFO: Inference done 558/1092. Dataloading: 0.0077 s/iter. Inference: 0.2329 s/iter. Eval: 0.1576 s/iter. Total: 0.3984 s/iter. ETA=0:03:32
+[02/25 18:14:05] mask2former INFO: Inference done 571/1092. Dataloading: 0.0078 s/iter. Inference: 0.2333 s/iter. Eval: 0.1576 s/iter. Total: 0.3988 s/iter. ETA=0:03:27
+[02/25 18:14:10] mask2former INFO: Inference done 584/1092. Dataloading: 0.0077 s/iter. Inference: 0.2331 s/iter. Eval: 0.1580 s/iter. Total: 0.3990 s/iter. ETA=0:03:22
+[02/25 18:14:16] mask2former INFO: Inference done 598/1092. Dataloading: 0.0078 s/iter. Inference: 0.2325 s/iter. Eval: 0.1577 s/iter. Total: 0.3981 s/iter. ETA=0:03:16
+[02/25 18:14:21] mask2former INFO: Inference done 611/1092. Dataloading: 0.0078 s/iter. Inference: 0.2323 s/iter. Eval: 0.1578 s/iter. Total: 0.3980 s/iter. ETA=0:03:11
+[02/25 18:14:26] mask2former INFO: Inference done 625/1092. Dataloading: 0.0078 s/iter. Inference: 0.2316 s/iter. Eval: 0.1579 s/iter. Total: 0.3974 s/iter. ETA=0:03:05
+[02/25 18:14:31] mask2former INFO: Inference done 638/1092. Dataloading: 0.0078 s/iter. Inference: 0.2318 s/iter. Eval: 0.1580 s/iter. Total: 0.3976 s/iter. ETA=0:03:00
+[02/25 18:14:36] mask2former INFO: Inference done 651/1092. Dataloading: 0.0078 s/iter. Inference: 0.2317 s/iter. Eval: 0.1578 s/iter. Total: 0.3974 s/iter. ETA=0:02:55
+[02/25 18:14:41] mask2former INFO: Inference done 664/1092. Dataloading: 0.0078 s/iter. Inference: 0.2316 s/iter. Eval: 0.1579 s/iter. Total: 0.3974 s/iter. ETA=0:02:50
+[02/25 18:14:46] mask2former INFO: Inference done 677/1092. Dataloading: 0.0078 s/iter. Inference: 0.2312 s/iter. Eval: 0.1581 s/iter. Total: 0.3972 s/iter. ETA=0:02:44
+[02/25 18:14:51] mask2former INFO: Inference done 689/1092. Dataloading: 0.0079 s/iter. Inference: 0.2312 s/iter. Eval: 0.1584 s/iter. Total: 0.3977 s/iter. ETA=0:02:40
+[02/25 18:14:57] mask2former INFO: Inference done 702/1092. Dataloading: 0.0079 s/iter. Inference: 0.2315 s/iter. Eval: 0.1582 s/iter. Total: 0.3977 s/iter. ETA=0:02:35
+[02/25 18:15:02] mask2former INFO: Inference done 717/1092. Dataloading: 0.0079 s/iter. Inference: 0.2315 s/iter. Eval: 0.1571 s/iter. Total: 0.3966 s/iter. ETA=0:02:28
+[02/25 18:15:07] mask2former INFO: Inference done 731/1092. Dataloading: 0.0079 s/iter. Inference: 0.2314 s/iter. Eval: 0.1566 s/iter. Total: 0.3961 s/iter. ETA=0:02:22
+[02/25 18:15:12] mask2former INFO: Inference done 744/1092. Dataloading: 0.0079 s/iter. Inference: 0.2314 s/iter. Eval: 0.1568 s/iter. Total: 0.3963 s/iter. ETA=0:02:17
+[02/25 18:15:17] mask2former INFO: Inference done 758/1092. Dataloading: 0.0079 s/iter. Inference: 0.2313 s/iter. Eval: 0.1565 s/iter. Total: 0.3958 s/iter. ETA=0:02:12
+[02/25 18:15:22] mask2former INFO: Inference done 770/1092. Dataloading: 0.0079 s/iter. Inference: 0.2315 s/iter. Eval: 0.1565 s/iter. Total: 0.3961 s/iter. ETA=0:02:07
+[02/25 18:15:28] mask2former INFO: Inference done 783/1092. Dataloading: 0.0078 s/iter. Inference: 0.2318 s/iter. Eval: 0.1563 s/iter. Total: 0.3961 s/iter. ETA=0:02:02
+[02/25 18:15:33] mask2former INFO: Inference done 795/1092. Dataloading: 0.0079 s/iter. Inference: 0.2321 s/iter. Eval: 0.1563 s/iter. Total: 0.3964 s/iter. ETA=0:01:57
+[02/25 18:15:38] mask2former INFO: Inference done 808/1092. Dataloading: 0.0079 s/iter. Inference: 0.2321 s/iter. Eval: 0.1562 s/iter. Total: 0.3963 s/iter. ETA=0:01:52
+[02/25 18:15:43] mask2former INFO: Inference done 821/1092. Dataloading: 0.0079 s/iter. Inference: 0.2324 s/iter. Eval: 0.1561 s/iter. Total: 0.3964 s/iter. ETA=0:01:47
+[02/25 18:15:48] mask2former INFO: Inference done 836/1092. Dataloading: 0.0078 s/iter. Inference: 0.2324 s/iter. Eval: 0.1552 s/iter. Total: 0.3956 s/iter. ETA=0:01:41
+[02/25 18:15:53] mask2former INFO: Inference done 849/1092. Dataloading: 0.0079 s/iter. Inference: 0.2323 s/iter. Eval: 0.1552 s/iter. Total: 0.3955 s/iter. ETA=0:01:36
+[02/25 18:15:59] mask2former INFO: Inference done 863/1092. Dataloading: 0.0078 s/iter. Inference: 0.2322 s/iter. Eval: 0.1551 s/iter. Total: 0.3953 s/iter. ETA=0:01:30
+[02/25 18:16:04] mask2former INFO: Inference done 877/1092. Dataloading: 0.0078 s/iter. Inference: 0.2322 s/iter. Eval: 0.1547 s/iter. Total: 0.3949 s/iter. ETA=0:01:24
+[02/25 18:16:09] mask2former INFO: Inference done 890/1092. Dataloading: 0.0078 s/iter. Inference: 0.2321 s/iter. Eval: 0.1547 s/iter. Total: 0.3947 s/iter. ETA=0:01:19
+[02/25 18:16:14] mask2former INFO: Inference done 904/1092. Dataloading: 0.0078 s/iter. Inference: 0.2320 s/iter. Eval: 0.1545 s/iter. Total: 0.3944 s/iter. ETA=0:01:14
+[02/25 18:16:19] mask2former INFO: Inference done 917/1092. Dataloading: 0.0078 s/iter. Inference: 0.2319 s/iter. Eval: 0.1545 s/iter. Total: 0.3943 s/iter. ETA=0:01:09
+[02/25 18:16:24] mask2former INFO: Inference done 930/1092. Dataloading: 0.0078 s/iter. Inference: 0.2320 s/iter. Eval: 0.1544 s/iter. Total: 0.3943 s/iter. ETA=0:01:03
+[02/25 18:16:29] mask2former INFO: Inference done 943/1092. Dataloading: 0.0078 s/iter. Inference: 0.2319 s/iter. Eval: 0.1545 s/iter. Total: 0.3943 s/iter. ETA=0:00:58
+[02/25 18:16:34] mask2former INFO: Inference done 955/1092. Dataloading: 0.0077 s/iter. Inference: 0.2318 s/iter. Eval: 0.1550 s/iter. Total: 0.3947 s/iter. ETA=0:00:54
+[02/25 18:16:40] mask2former INFO: Inference done 968/1092. Dataloading: 0.0078 s/iter. Inference: 0.2317 s/iter. Eval: 0.1551 s/iter. Total: 0.3947 s/iter. ETA=0:00:48
+[02/25 18:16:45] mask2former INFO: Inference done 981/1092. Dataloading: 0.0078 s/iter. Inference: 0.2316 s/iter. Eval: 0.1555 s/iter. Total: 0.3950 s/iter. ETA=0:00:43
+[02/25 18:16:50] mask2former INFO: Inference done 993/1092. Dataloading: 0.0078 s/iter. Inference: 0.2316 s/iter. Eval: 0.1560 s/iter. Total: 0.3955 s/iter. ETA=0:00:39
+[02/25 18:16:56] mask2former INFO: Inference done 1007/1092. Dataloading: 0.0078 s/iter. Inference: 0.2315 s/iter. Eval: 0.1560 s/iter. Total: 0.3954 s/iter. ETA=0:00:33
+[02/25 18:17:01] mask2former INFO: Inference done 1019/1092. Dataloading: 0.0078 s/iter. Inference: 0.2317 s/iter. Eval: 0.1560 s/iter. Total: 0.3956 s/iter. ETA=0:00:28
+[02/25 18:17:06] mask2former INFO: Inference done 1031/1092. Dataloading: 0.0078 s/iter. Inference: 0.2316 s/iter. Eval: 0.1563 s/iter. Total: 0.3959 s/iter. ETA=0:00:24
+[02/25 18:17:11] mask2former INFO: Inference done 1042/1092. Dataloading: 0.0078 s/iter. Inference: 0.2320 s/iter. Eval: 0.1568 s/iter. Total: 0.3967 s/iter. ETA=0:00:19
+[02/25 18:17:16] mask2former INFO: Inference done 1056/1092. Dataloading: 0.0078 s/iter. Inference: 0.2318 s/iter. Eval: 0.1567 s/iter. Total: 0.3964 s/iter. ETA=0:00:14
+[02/25 18:17:21] mask2former INFO: Inference done 1070/1092. Dataloading: 0.0078 s/iter. Inference: 0.2320 s/iter. Eval: 0.1561 s/iter. Total: 0.3961 s/iter. ETA=0:00:08
+[02/25 18:17:26] mask2former INFO: Inference done 1083/1092. Dataloading: 0.0078 s/iter. Inference: 0.2319 s/iter. Eval: 0.1562 s/iter. Total: 0.3961 s/iter. ETA=0:00:03
+[02/25 19:05:58] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: []
+[02/25 19:05:58] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[02/25 19:05:58] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[02/25 19:06:13] mask2former INFO: Inference done 11/1092. Dataloading: 0.0072 s/iter. Inference: 0.2102 s/iter. Eval: 0.1714 s/iter. Total: 0.3888 s/iter. ETA=0:07:00
+[02/25 19:06:18] mask2former INFO: Inference done 24/1092. Dataloading: 0.0073 s/iter. Inference: 0.2193 s/iter. Eval: 0.1681 s/iter. Total: 0.3948 s/iter. ETA=0:07:01
+[02/25 19:06:23] mask2former INFO: Inference done 37/1092. Dataloading: 0.0074 s/iter. Inference: 0.2287 s/iter. Eval: 0.1610 s/iter. Total: 0.3973 s/iter. ETA=0:06:59
+[02/25 19:06:28] mask2former INFO: Inference done 51/1092. Dataloading: 0.0077 s/iter. Inference: 0.2278 s/iter. Eval: 0.1512 s/iter. Total: 0.3869 s/iter. ETA=0:06:42
+[02/25 19:06:33] mask2former INFO: Inference done 65/1092. Dataloading: 0.0075 s/iter. Inference: 0.2265 s/iter. Eval: 0.1486 s/iter. Total: 0.3828 s/iter. ETA=0:06:33
+[02/25 19:06:38] mask2former INFO: Inference done 79/1092. Dataloading: 0.0073 s/iter. Inference: 0.2249 s/iter. Eval: 0.1467 s/iter. Total: 0.3790 s/iter. ETA=0:06:23
+[02/25 19:06:44] mask2former INFO: Inference done 93/1092. Dataloading: 0.0075 s/iter. Inference: 0.2239 s/iter. Eval: 0.1451 s/iter. Total: 0.3766 s/iter. ETA=0:06:16
+[02/25 19:06:49] mask2former INFO: Inference done 106/1092. Dataloading: 0.0074 s/iter. Inference: 0.2259 s/iter. Eval: 0.1446 s/iter. Total: 0.3781 s/iter. ETA=0:06:12
+[02/25 19:06:54] mask2former INFO: Inference done 120/1092. Dataloading: 0.0074 s/iter. Inference: 0.2254 s/iter. Eval: 0.1451 s/iter. Total: 0.3781 s/iter. ETA=0:06:07
+[02/25 19:06:59] mask2former INFO: Inference done 133/1092. Dataloading: 0.0076 s/iter. Inference: 0.2258 s/iter. Eval: 0.1453 s/iter. Total: 0.3788 s/iter. ETA=0:06:03
+[02/25 19:07:04] mask2former INFO: Inference done 145/1092. Dataloading: 0.0075 s/iter. Inference: 0.2250 s/iter. Eval: 0.1508 s/iter. Total: 0.3833 s/iter. ETA=0:06:02
+[02/25 19:07:09] mask2former INFO: Inference done 159/1092. Dataloading: 0.0073 s/iter. Inference: 0.2255 s/iter. Eval: 0.1502 s/iter. Total: 0.3831 s/iter. ETA=0:05:57
+[02/25 19:07:15] mask2former INFO: Inference done 173/1092. Dataloading: 0.0073 s/iter. Inference: 0.2255 s/iter. Eval: 0.1487 s/iter. Total: 0.3816 s/iter. ETA=0:05:50
+[02/25 19:07:20] mask2former INFO: Inference done 187/1092. Dataloading: 0.0074 s/iter. Inference: 0.2249 s/iter. Eval: 0.1495 s/iter. Total: 0.3818 s/iter. ETA=0:05:45
+[02/25 19:07:25] mask2former INFO: Inference done 201/1092. Dataloading: 0.0075 s/iter. Inference: 0.2247 s/iter. Eval: 0.1497 s/iter. Total: 0.3820 s/iter. ETA=0:05:40
+[02/25 19:07:30] mask2former INFO: Inference done 215/1092. Dataloading: 0.0075 s/iter. Inference: 0.2249 s/iter. Eval: 0.1486 s/iter. Total: 0.3811 s/iter. ETA=0:05:34
+[02/25 19:07:36] mask2former INFO: Inference done 229/1092. Dataloading: 0.0076 s/iter. Inference: 0.2256 s/iter. Eval: 0.1479 s/iter. Total: 0.3811 s/iter. ETA=0:05:28
+[02/25 19:07:41] mask2former INFO: Inference done 241/1092. Dataloading: 0.0077 s/iter. Inference: 0.2249 s/iter. Eval: 0.1504 s/iter. Total: 0.3830 s/iter. ETA=0:05:25
+[02/25 19:07:46] mask2former INFO: Inference done 253/1092. Dataloading: 0.0078 s/iter. Inference: 0.2254 s/iter. Eval: 0.1515 s/iter. Total: 0.3848 s/iter. ETA=0:05:22
+[02/25 19:07:51] mask2former INFO: Inference done 267/1092. Dataloading: 0.0078 s/iter. Inference: 0.2249 s/iter. Eval: 0.1517 s/iter. Total: 0.3845 s/iter. ETA=0:05:17
+[02/25 19:07:56] mask2former INFO: Inference done 280/1092. Dataloading: 0.0078 s/iter. Inference: 0.2251 s/iter. Eval: 0.1516 s/iter. Total: 0.3846 s/iter. ETA=0:05:12
+[02/25 19:08:01] mask2former INFO: Inference done 294/1092. Dataloading: 0.0077 s/iter. Inference: 0.2251 s/iter. Eval: 0.1507 s/iter. Total: 0.3837 s/iter. ETA=0:05:06
+[02/25 19:08:06] mask2former INFO: Inference done 305/1092. Dataloading: 0.0079 s/iter. Inference: 0.2260 s/iter. Eval: 0.1524 s/iter. Total: 0.3865 s/iter. ETA=0:05:04
+[02/25 19:08:12] mask2former INFO: Inference done 319/1092. Dataloading: 0.0079 s/iter. Inference: 0.2258 s/iter. Eval: 0.1521 s/iter. Total: 0.3859 s/iter. ETA=0:04:58
+[02/25 19:08:17] mask2former INFO: Inference done 332/1092. Dataloading: 0.0078 s/iter. Inference: 0.2267 s/iter. Eval: 0.1514 s/iter. Total: 0.3860 s/iter. ETA=0:04:53
+[02/25 19:08:22] mask2former INFO: Inference done 345/1092. Dataloading: 0.0078 s/iter. Inference: 0.2268 s/iter. Eval: 0.1518 s/iter. Total: 0.3865 s/iter. ETA=0:04:48
+[02/25 19:08:27] mask2former INFO: Inference done 359/1092. Dataloading: 0.0078 s/iter. Inference: 0.2264 s/iter. Eval: 0.1512 s/iter. Total: 0.3855 s/iter. ETA=0:04:42
+[02/25 19:08:32] mask2former INFO: Inference done 373/1092. Dataloading: 0.0078 s/iter. Inference: 0.2264 s/iter. Eval: 0.1511 s/iter. Total: 0.3853 s/iter. ETA=0:04:37
+[02/25 19:08:38] mask2former INFO: Inference done 386/1092. Dataloading: 0.0079 s/iter. Inference: 0.2260 s/iter. Eval: 0.1520 s/iter. Total: 0.3861 s/iter. ETA=0:04:32
+[02/25 19:08:43] mask2former INFO: Inference done 400/1092. Dataloading: 0.0079 s/iter. Inference: 0.2259 s/iter. Eval: 0.1521 s/iter. Total: 0.3860 s/iter. ETA=0:04:27
+[02/25 19:08:48] mask2former INFO: Inference done 413/1092. Dataloading: 0.0079 s/iter. Inference: 0.2267 s/iter. Eval: 0.1519 s/iter. Total: 0.3867 s/iter. ETA=0:04:22
+[02/25 19:08:53] mask2former INFO: Inference done 427/1092. Dataloading: 0.0079 s/iter. Inference: 0.2265 s/iter. Eval: 0.1516 s/iter. Total: 0.3861 s/iter. ETA=0:04:16
+[02/25 19:08:59] mask2former INFO: Inference done 441/1092. Dataloading: 0.0079 s/iter. Inference: 0.2261 s/iter. Eval: 0.1518 s/iter. Total: 0.3859 s/iter. ETA=0:04:11
+[02/25 19:09:04] mask2former INFO: Inference done 455/1092. Dataloading: 0.0079 s/iter. Inference: 0.2257 s/iter. Eval: 0.1521 s/iter. Total: 0.3858 s/iter. ETA=0:04:05
+[02/25 19:09:09] mask2former INFO: Inference done 469/1092. Dataloading: 0.0079 s/iter. Inference: 0.2259 s/iter. Eval: 0.1512 s/iter. Total: 0.3851 s/iter. ETA=0:03:59
+[02/25 19:09:14] mask2former INFO: Inference done 483/1092. Dataloading: 0.0079 s/iter. Inference: 0.2259 s/iter. Eval: 0.1505 s/iter. Total: 0.3845 s/iter. ETA=0:03:54
+[02/25 19:09:19] mask2former INFO: Inference done 495/1092. Dataloading: 0.0079 s/iter. Inference: 0.2257 s/iter. Eval: 0.1520 s/iter. Total: 0.3857 s/iter. ETA=0:03:50
+[02/25 19:09:25] mask2former INFO: Inference done 507/1092. Dataloading: 0.0080 s/iter. Inference: 0.2262 s/iter. Eval: 0.1530 s/iter. Total: 0.3873 s/iter. ETA=0:03:46
+[02/25 19:09:30] mask2former INFO: Inference done 521/1092. Dataloading: 0.0079 s/iter. Inference: 0.2259 s/iter. Eval: 0.1527 s/iter. Total: 0.3866 s/iter. ETA=0:03:40
+[02/25 19:09:35] mask2former INFO: Inference done 533/1092. Dataloading: 0.0078 s/iter. Inference: 0.2265 s/iter. Eval: 0.1529 s/iter. Total: 0.3874 s/iter. ETA=0:03:36
+[02/25 19:09:40] mask2former INFO: Inference done 546/1092. Dataloading: 0.0078 s/iter. Inference: 0.2271 s/iter. Eval: 0.1528 s/iter. Total: 0.3878 s/iter. ETA=0:03:31
+[02/25 19:09:46] mask2former INFO: Inference done 559/1092. Dataloading: 0.0078 s/iter. Inference: 0.2272 s/iter. Eval: 0.1531 s/iter. Total: 0.3882 s/iter. ETA=0:03:26
+[02/25 19:09:51] mask2former INFO: Inference done 571/1092. Dataloading: 0.0078 s/iter. Inference: 0.2275 s/iter. Eval: 0.1535 s/iter. Total: 0.3889 s/iter. ETA=0:03:22
+[02/25 19:09:56] mask2former INFO: Inference done 584/1092. Dataloading: 0.0078 s/iter. Inference: 0.2275 s/iter. Eval: 0.1538 s/iter. Total: 0.3892 s/iter. ETA=0:03:17
+[02/25 19:10:01] mask2former INFO: Inference done 597/1092. Dataloading: 0.0078 s/iter. Inference: 0.2277 s/iter. Eval: 0.1538 s/iter. Total: 0.3894 s/iter. ETA=0:03:12
+[02/25 19:10:06] mask2former INFO: Inference done 609/1092. Dataloading: 0.0077 s/iter. Inference: 0.2281 s/iter. Eval: 0.1547 s/iter. Total: 0.3906 s/iter. ETA=0:03:08
+[02/25 19:10:12] mask2former INFO: Inference done 622/1092. Dataloading: 0.0077 s/iter. Inference: 0.2283 s/iter. Eval: 0.1546 s/iter. Total: 0.3907 s/iter. ETA=0:03:03
+[02/25 19:10:17] mask2former INFO: Inference done 636/1092. Dataloading: 0.0078 s/iter. Inference: 0.2282 s/iter. Eval: 0.1543 s/iter. Total: 0.3904 s/iter. ETA=0:02:58
+[02/25 19:10:22] mask2former INFO: Inference done 649/1092. Dataloading: 0.0078 s/iter. Inference: 0.2282 s/iter. Eval: 0.1543 s/iter. Total: 0.3905 s/iter. ETA=0:02:52
+[02/25 19:10:27] mask2former INFO: Inference done 663/1092. Dataloading: 0.0078 s/iter. Inference: 0.2279 s/iter. Eval: 0.1543 s/iter. Total: 0.3901 s/iter. ETA=0:02:47
+[02/25 19:10:32] mask2former INFO: Inference done 676/1092. Dataloading: 0.0077 s/iter. Inference: 0.2284 s/iter. Eval: 0.1540 s/iter. Total: 0.3903 s/iter. ETA=0:02:42
+[02/25 19:10:38] mask2former INFO: Inference done 689/1092. Dataloading: 0.0078 s/iter. Inference: 0.2282 s/iter. Eval: 0.1544 s/iter. Total: 0.3906 s/iter. ETA=0:02:37
+[02/25 19:10:43] mask2former INFO: Inference done 702/1092. Dataloading: 0.0078 s/iter. Inference: 0.2284 s/iter. Eval: 0.1544 s/iter. Total: 0.3906 s/iter. ETA=0:02:32
+[02/25 19:10:48] mask2former INFO: Inference done 714/1092. Dataloading: 0.0078 s/iter. Inference: 0.2285 s/iter. Eval: 0.1547 s/iter. Total: 0.3911 s/iter. ETA=0:02:27
+[02/25 19:10:53] mask2former INFO: Inference done 727/1092. Dataloading: 0.0078 s/iter. Inference: 0.2287 s/iter. Eval: 0.1547 s/iter. Total: 0.3913 s/iter. ETA=0:02:22
+[02/25 19:10:58] mask2former INFO: Inference done 741/1092. Dataloading: 0.0078 s/iter. Inference: 0.2288 s/iter. Eval: 0.1544 s/iter. Total: 0.3911 s/iter. ETA=0:02:17
+[02/25 19:11:04] mask2former INFO: Inference done 755/1092. Dataloading: 0.0078 s/iter. Inference: 0.2287 s/iter. Eval: 0.1542 s/iter. Total: 0.3908 s/iter. ETA=0:02:11
+[02/25 19:11:09] mask2former INFO: Inference done 768/1092. Dataloading: 0.0078 s/iter. Inference: 0.2291 s/iter. Eval: 0.1541 s/iter. Total: 0.3912 s/iter. ETA=0:02:06
+[02/25 19:11:14] mask2former INFO: Inference done 782/1092. Dataloading: 0.0078 s/iter. Inference: 0.2290 s/iter. Eval: 0.1539 s/iter. Total: 0.3908 s/iter. ETA=0:02:01
+[02/25 19:11:19] mask2former INFO: Inference done 795/1092. Dataloading: 0.0078 s/iter. Inference: 0.2290 s/iter. Eval: 0.1541 s/iter. Total: 0.3911 s/iter. ETA=0:01:56
+[02/25 19:11:25] mask2former INFO: Inference done 807/1092. Dataloading: 0.0079 s/iter. Inference: 0.2295 s/iter. Eval: 0.1542 s/iter. Total: 0.3917 s/iter. ETA=0:01:51
+[02/25 19:11:30] mask2former INFO: Inference done 820/1092. Dataloading: 0.0079 s/iter. Inference: 0.2292 s/iter. Eval: 0.1545 s/iter. Total: 0.3918 s/iter. ETA=0:01:46
+[02/25 19:11:35] mask2former INFO: Inference done 833/1092. Dataloading: 0.0079 s/iter. Inference: 0.2294 s/iter. Eval: 0.1547 s/iter. Total: 0.3921 s/iter. ETA=0:01:41
+[02/25 19:11:40] mask2former INFO: Inference done 847/1092. Dataloading: 0.0078 s/iter. Inference: 0.2293 s/iter. Eval: 0.1545 s/iter. Total: 0.3918 s/iter. ETA=0:01:35
+[02/25 19:11:45] mask2former INFO: Inference done 862/1092. Dataloading: 0.0078 s/iter. Inference: 0.2292 s/iter. Eval: 0.1538 s/iter. Total: 0.3910 s/iter. ETA=0:01:29
+[02/25 19:11:51] mask2former INFO: Inference done 875/1092. Dataloading: 0.0078 s/iter. Inference: 0.2289 s/iter. Eval: 0.1541 s/iter. Total: 0.3909 s/iter. ETA=0:01:24
+[02/25 19:11:56] mask2former INFO: Inference done 887/1092. Dataloading: 0.0078 s/iter. Inference: 0.2293 s/iter. Eval: 0.1544 s/iter. Total: 0.3916 s/iter. ETA=0:01:20
+[02/25 19:12:01] mask2former INFO: Inference done 900/1092. Dataloading: 0.0078 s/iter. Inference: 0.2291 s/iter. Eval: 0.1546 s/iter. Total: 0.3916 s/iter. ETA=0:01:15
+[02/25 19:12:06] mask2former INFO: Inference done 911/1092. Dataloading: 0.0078 s/iter. Inference: 0.2295 s/iter. Eval: 0.1551 s/iter. Total: 0.3925 s/iter. ETA=0:01:11
+[02/25 19:12:11] mask2former INFO: Inference done 924/1092. Dataloading: 0.0078 s/iter. Inference: 0.2295 s/iter. Eval: 0.1553 s/iter. Total: 0.3927 s/iter. ETA=0:01:05
+[02/25 19:12:17] mask2former INFO: Inference done 938/1092. Dataloading: 0.0078 s/iter. Inference: 0.2293 s/iter. Eval: 0.1552 s/iter. Total: 0.3924 s/iter. ETA=0:01:00
+[02/25 19:12:22] mask2former INFO: Inference done 951/1092. Dataloading: 0.0078 s/iter. Inference: 0.2297 s/iter. Eval: 0.1552 s/iter. Total: 0.3928 s/iter. ETA=0:00:55
+[02/25 19:12:27] mask2former INFO: Inference done 965/1092. Dataloading: 0.0077 s/iter. Inference: 0.2297 s/iter. Eval: 0.1551 s/iter. Total: 0.3926 s/iter. ETA=0:00:49
+[02/25 19:12:33] mask2former INFO: Inference done 978/1092. Dataloading: 0.0078 s/iter. Inference: 0.2295 s/iter. Eval: 0.1553 s/iter. Total: 0.3927 s/iter. ETA=0:00:44
+[02/25 19:12:38] mask2former INFO: Inference done 990/1092. Dataloading: 0.0077 s/iter. Inference: 0.2297 s/iter. Eval: 0.1557 s/iter. Total: 0.3933 s/iter. ETA=0:00:40
+[02/25 19:12:43] mask2former INFO: Inference done 1003/1092. Dataloading: 0.0078 s/iter. Inference: 0.2300 s/iter. Eval: 0.1556 s/iter. Total: 0.3935 s/iter. ETA=0:00:35
+[02/25 19:12:48] mask2former INFO: Inference done 1017/1092. Dataloading: 0.0077 s/iter. Inference: 0.2298 s/iter. Eval: 0.1556 s/iter. Total: 0.3932 s/iter. ETA=0:00:29
+[02/25 19:12:54] mask2former INFO: Inference done 1031/1092. Dataloading: 0.0078 s/iter. Inference: 0.2295 s/iter. Eval: 0.1557 s/iter. Total: 0.3931 s/iter. ETA=0:00:23
+[02/25 19:12:59] mask2former INFO: Inference done 1045/1092. Dataloading: 0.0077 s/iter. Inference: 0.2296 s/iter. Eval: 0.1553 s/iter. Total: 0.3928 s/iter. ETA=0:00:18
+[02/25 19:13:04] mask2former INFO: Inference done 1058/1092. Dataloading: 0.0078 s/iter. Inference: 0.2297 s/iter. Eval: 0.1553 s/iter. Total: 0.3929 s/iter. ETA=0:00:13
+[02/25 19:13:10] mask2former INFO: Inference done 1071/1092. Dataloading: 0.0078 s/iter. Inference: 0.2299 s/iter. Eval: 0.1555 s/iter. Total: 0.3933 s/iter. ETA=0:00:08
+[02/25 19:13:15] mask2former INFO: Inference done 1086/1092. Dataloading: 0.0078 s/iter. Inference: 0.2297 s/iter. Eval: 0.1551 s/iter. Total: 0.3927 s/iter. ETA=0:00:02
+[02/25 20:01:49] mask2former.data.dataset_mappers.mask_former_sceneflow_dataset_mapper INFO: [MaskFormerSceneFlowDatasetMapper] Augmentations used in inference: []
+[02/25 20:01:49] detectron2.data.common INFO: Serializing 4370 elements to byte tensors and concatenating them all ...
+[02/25 20:01:49] detectron2.data.common INFO: Serialized dataset takes 1.22 MiB
+[02/25 20:02:04] mask2former INFO: Inference done 11/1092. Dataloading: 0.0074 s/iter. Inference: 0.2584 s/iter. Eval: 0.1616 s/iter. Total: 0.4274 s/iter. ETA=0:07:42
+[02/25 20:02:09] mask2former INFO: Inference done 24/1092. Dataloading: 0.0070 s/iter. Inference: 0.2556 s/iter. Eval: 0.1538 s/iter. Total: 0.4164 s/iter. ETA=0:07:24
+[02/25 20:02:14] mask2former INFO: Inference done 37/1092. Dataloading: 0.0065 s/iter. Inference: 0.2466 s/iter. Eval: 0.1560 s/iter. Total: 0.4093 s/iter. ETA=0:07:11
+[02/25 20:02:19] mask2former INFO: Inference done 50/1092. Dataloading: 0.0065 s/iter. Inference: 0.2437 s/iter. Eval: 0.1534 s/iter. Total: 0.4036 s/iter. ETA=0:07:00
+[02/25 20:02:25] mask2former INFO: Inference done 62/1092. Dataloading: 0.0068 s/iter. Inference: 0.2433 s/iter. Eval: 0.1625 s/iter. Total: 0.4127 s/iter. ETA=0:07:05
+[02/25 20:02:30] mask2former INFO: Inference done 76/1092. Dataloading: 0.0066 s/iter. Inference: 0.2397 s/iter. Eval: 0.1591 s/iter. Total: 0.4055 s/iter. ETA=0:06:51
+[02/25 20:02:35] mask2former INFO: Inference done 89/1092. Dataloading: 0.0069 s/iter. Inference: 0.2385 s/iter. Eval: 0.1601 s/iter. Total: 0.4057 s/iter. ETA=0:06:46
+[02/25 20:02:40] mask2former INFO: Inference done 101/1092. Dataloading: 0.0072 s/iter. Inference: 0.2410 s/iter. Eval: 0.1603 s/iter. Total: 0.4087 s/iter. ETA=0:06:44
+[02/25 20:02:46] mask2former INFO: Inference done 115/1092. Dataloading: 0.0072 s/iter. Inference: 0.2399 s/iter. Eval: 0.1578 s/iter. Total: 0.4050 s/iter. ETA=0:06:35
+[02/25 20:02:51] mask2former INFO: Inference done 128/1092. Dataloading: 0.0073 s/iter. Inference: 0.2390 s/iter. Eval: 0.1580 s/iter. Total: 0.4045 s/iter. ETA=0:06:29
+[02/25 20:02:56] mask2former INFO: Inference done 141/1092. Dataloading: 0.0072 s/iter. Inference: 0.2375 s/iter. Eval: 0.1589 s/iter. Total: 0.4037 s/iter. ETA=0:06:23
+[02/25 20:03:01] mask2former INFO: Inference done 155/1092. Dataloading: 0.0072 s/iter. Inference: 0.2366 s/iter. Eval: 0.1578 s/iter. Total: 0.4017 s/iter. ETA=0:06:16
+[02/25 20:03:07] mask2former INFO: Inference done 168/1092. Dataloading: 0.0071 s/iter. Inference: 0.2375 s/iter. Eval: 0.1569 s/iter. Total: 0.4017 s/iter. ETA=0:06:11
+[02/25 20:03:12] mask2former INFO: Inference done 181/1092. Dataloading: 0.0074 s/iter. Inference: 0.2368 s/iter. Eval: 0.1567 s/iter. Total: 0.4010 s/iter. ETA=0:06:05
+[02/25 20:03:17] mask2former INFO: Inference done 193/1092. Dataloading: 0.0074 s/iter. Inference: 0.2376 s/iter. Eval: 0.1578 s/iter. Total: 0.4028 s/iter. ETA=0:06:02
+[02/25 20:03:22] mask2former INFO: Inference done 205/1092. Dataloading: 0.0074 s/iter. Inference: 0.2380 s/iter. Eval: 0.1592 s/iter. Total: 0.4047 s/iter. ETA=0:05:58
+[02/25 20:03:27] mask2former INFO: Inference done 219/1092. Dataloading: 0.0073 s/iter. Inference: 0.2379 s/iter. Eval: 0.1575 s/iter. Total: 0.4028 s/iter. ETA=0:05:51
+[02/25 20:03:33] mask2former INFO: Inference done 233/1092. Dataloading: 0.0073 s/iter. Inference: 0.2355 s/iter. Eval: 0.1581 s/iter. Total: 0.4010 s/iter. ETA=0:05:44
+[02/25 20:03:38] mask2former INFO: Inference done 244/1092. Dataloading: 0.0073 s/iter. Inference: 0.2358 s/iter. Eval: 0.1606 s/iter. Total: 0.4038 s/iter. ETA=0:05:42
+[02/25 20:03:43] mask2former INFO: Inference done 257/1092. Dataloading: 0.0074 s/iter. Inference: 0.2360 s/iter. Eval: 0.1602 s/iter. Total: 0.4037 s/iter. ETA=0:05:37
+[02/25 20:03:48] mask2former INFO: Inference done 269/1092. Dataloading: 0.0074 s/iter. Inference: 0.2364 s/iter. Eval: 0.1615 s/iter. Total: 0.4054 s/iter. ETA=0:05:33
+[02/25 20:03:53] mask2former INFO: Inference done 281/1092. Dataloading: 0.0074 s/iter. Inference: 0.2371 s/iter. Eval: 0.1616 s/iter. Total: 0.4062 s/iter. ETA=0:05:29
+[02/25 20:03:58] mask2former INFO: Inference done 293/1092. Dataloading: 0.0073 s/iter. Inference: 0.2378 s/iter. Eval: 0.1619 s/iter. Total: 0.4071 s/iter. ETA=0:05:25
+[02/25 20:04:03] mask2former INFO: Inference done 305/1092. Dataloading: 0.0073 s/iter. Inference: 0.2367 s/iter. Eval: 0.1635 s/iter. Total: 0.4076 s/iter. ETA=0:05:20
+[02/25 20:04:08] mask2former INFO: Inference done 318/1092. Dataloading: 0.0073 s/iter. Inference: 0.2367 s/iter. Eval: 0.1628 s/iter. Total: 0.4068 s/iter. ETA=0:05:14
+[02/25 20:04:14] mask2former INFO: Inference done 332/1092. Dataloading: 0.0072 s/iter. Inference: 0.2364 s/iter. Eval: 0.1618 s/iter. Total: 0.4056 s/iter. ETA=0:05:08
+[02/25 20:04:19] mask2former INFO: Inference done 343/1092. Dataloading: 0.0074 s/iter. Inference: 0.2369 s/iter. Eval: 0.1631 s/iter. Total: 0.4075 s/iter. ETA=0:05:05
+[02/25 20:04:24] mask2former INFO: Inference done 356/1092. Dataloading: 0.0076 s/iter. Inference: 0.2368 s/iter. Eval: 0.1630 s/iter. Total: 0.4075 s/iter. ETA=0:04:59
+[02/25 20:04:29] mask2former INFO: Inference done 367/1092. Dataloading: 0.0076 s/iter. Inference: 0.2376 s/iter. Eval: 0.1645 s/iter. Total: 0.4097 s/iter. ETA=0:04:57
+[02/25 20:04:35] mask2former INFO: Inference done 382/1092. Dataloading: 0.0077 s/iter. Inference: 0.2364 s/iter. Eval: 0.1631 s/iter. Total: 0.4073 s/iter. ETA=0:04:49
+[02/25 20:04:40] mask2former INFO: Inference done 394/1092. Dataloading: 0.0077 s/iter. Inference: 0.2371 s/iter. Eval: 0.1631 s/iter. Total: 0.4080 s/iter. ETA=0:04:44
+[02/25 20:04:45] mask2former INFO: Inference done 408/1092. Dataloading: 0.0076 s/iter. Inference: 0.2373 s/iter. Eval: 0.1620 s/iter. Total: 0.4070 s/iter. ETA=0:04:38
+[02/25 20:04:50] mask2former INFO: Inference done 420/1092. Dataloading: 0.0076 s/iter. Inference: 0.2378 s/iter. Eval: 0.1626 s/iter. Total: 0.4082 s/iter. ETA=0:04:34
+[02/25 20:04:56] mask2former INFO: Inference done 433/1092. Dataloading: 0.0076 s/iter. Inference: 0.2381 s/iter. Eval: 0.1621 s/iter. Total: 0.4079 s/iter. ETA=0:04:28
+[02/25 20:05:01] mask2former INFO: Inference done 445/1092. Dataloading: 0.0076 s/iter. Inference: 0.2382 s/iter. Eval: 0.1628 s/iter. Total: 0.4086 s/iter. ETA=0:04:24
+[02/25 20:05:06] mask2former INFO: Inference done 460/1092. Dataloading: 0.0075 s/iter. Inference: 0.2377 s/iter. Eval: 0.1614 s/iter. Total: 0.4067 s/iter. ETA=0:04:17
+[02/25 20:05:11] mask2former INFO: Inference done 473/1092. Dataloading: 0.0076 s/iter. Inference: 0.2372 s/iter. Eval: 0.1614 s/iter. Total: 0.4062 s/iter. ETA=0:04:11
+[02/25 20:05:16] mask2former INFO: Inference done 486/1092. Dataloading: 0.0075 s/iter. Inference: 0.2372 s/iter. Eval: 0.1610 s/iter. Total: 0.4059 s/iter. ETA=0:04:05
+[02/25 20:05:21] mask2former INFO: Inference done 498/1092. Dataloading: 0.0076 s/iter. Inference: 0.2371 s/iter. Eval: 0.1616 s/iter. Total: 0.4063 s/iter. ETA=0:04:01
+[02/25 20:05:27] mask2former INFO: Inference done 512/1092. Dataloading: 0.0076 s/iter. Inference: 0.2368 s/iter. Eval: 0.1611 s/iter. Total: 0.4056 s/iter. ETA=0:03:55
+[02/25 20:05:32] mask2former INFO: Inference done 525/1092. Dataloading: 0.0076 s/iter. Inference: 0.2372 s/iter. Eval: 0.1607 s/iter. Total: 0.4057 s/iter. ETA=0:03:50
+[02/25 20:05:37] mask2former INFO: Inference done 539/1092. Dataloading: 0.0077 s/iter. Inference: 0.2368 s/iter. Eval: 0.1606 s/iter. Total: 0.4052 s/iter. ETA=0:03:44
+[02/25 20:05:43] mask2former INFO: Inference done 554/1092. Dataloading: 0.0076 s/iter. Inference: 0.2365 s/iter. Eval: 0.1598 s/iter. Total: 0.4040 s/iter. ETA=0:03:37
+[02/25 20:05:48] mask2former INFO: Inference done 567/1092. Dataloading: 0.0076 s/iter. Inference: 0.2366 s/iter. Eval: 0.1598 s/iter. Total: 0.4041 s/iter. ETA=0:03:32
+[02/25 20:05:54] mask2former INFO: Inference done 581/1092. Dataloading: 0.0076 s/iter. Inference: 0.2364 s/iter. Eval: 0.1597 s/iter. Total: 0.4038 s/iter. ETA=0:03:26
+[02/25 20:05:59] mask2former INFO: Inference done 595/1092. Dataloading: 0.0076 s/iter. Inference: 0.2358 s/iter. Eval: 0.1596 s/iter. Total: 0.4031 s/iter. ETA=0:03:20
+[02/25 20:06:04] mask2former INFO: Inference done 608/1092. Dataloading: 0.0077 s/iter. Inference: 0.2354 s/iter. Eval: 0.1600 s/iter. Total: 0.4032 s/iter. ETA=0:03:15
+[02/25 20:06:09] mask2former INFO: Inference done 621/1092. Dataloading: 0.0077 s/iter. Inference: 0.2350 s/iter. Eval: 0.1601 s/iter. Total: 0.4029 s/iter. ETA=0:03:09
+[02/25 20:06:14] mask2former INFO: Inference done 634/1092. Dataloading: 0.0077 s/iter. Inference: 0.2350 s/iter. Eval: 0.1598 s/iter. Total: 0.4025 s/iter. ETA=0:03:04
+[02/25 20:06:20] mask2former INFO: Inference done 648/1092. Dataloading: 0.0077 s/iter. Inference: 0.2349 s/iter. Eval: 0.1595 s/iter. Total: 0.4021 s/iter. ETA=0:02:58
+[02/25 20:06:25] mask2former INFO: Inference done 661/1092. Dataloading: 0.0077 s/iter. Inference: 0.2347 s/iter. Eval: 0.1599 s/iter. Total: 0.4023 s/iter. ETA=0:02:53
+[02/25 20:06:30] mask2former INFO: Inference done 676/1092. Dataloading: 0.0076 s/iter. Inference: 0.2342 s/iter. Eval: 0.1591 s/iter. Total: 0.4011 s/iter. ETA=0:02:46
+[02/25 20:06:36] mask2former INFO: Inference done 689/1092. Dataloading: 0.0076 s/iter. Inference: 0.2340 s/iter. Eval: 0.1596 s/iter. Total: 0.4013 s/iter. ETA=0:02:41
+[02/25 20:06:41] mask2former INFO: Inference done 701/1092. Dataloading: 0.0076 s/iter. Inference: 0.2343 s/iter. Eval: 0.1596 s/iter. Total: 0.4016 s/iter. ETA=0:02:37
+[02/25 20:06:46] mask2former INFO: Inference done 714/1092. Dataloading: 0.0076 s/iter. Inference: 0.2342 s/iter. Eval: 0.1594 s/iter. Total: 0.4013 s/iter. ETA=0:02:31
+[02/25 20:06:51] mask2former INFO: Inference done 728/1092. Dataloading: 0.0076 s/iter. Inference: 0.2340 s/iter. Eval: 0.1592 s/iter. Total: 0.4009 s/iter. ETA=0:02:25
+[02/25 20:06:56] mask2former INFO: Inference done 742/1092. Dataloading: 0.0075 s/iter. Inference: 0.2336 s/iter. Eval: 0.1591 s/iter. Total: 0.4003 s/iter. ETA=0:02:20
+[02/25 20:07:01] mask2former INFO: Inference done 755/1092. Dataloading: 0.0076 s/iter. Inference: 0.2338 s/iter. Eval: 0.1587 s/iter. Total: 0.4001 s/iter. ETA=0:02:14
+[02/25 20:07:07] mask2former INFO: Inference done 769/1092. Dataloading: 0.0076 s/iter. Inference: 0.2337 s/iter. Eval: 0.1584 s/iter. Total: 0.3998 s/iter. ETA=0:02:09
+[02/25 20:07:12] mask2former INFO: Inference done 782/1092. Dataloading: 0.0076 s/iter. Inference: 0.2339 s/iter. Eval: 0.1583 s/iter. Total: 0.3999 s/iter. ETA=0:02:03
+[02/25 20:07:17] mask2former INFO: Inference done 794/1092. Dataloading: 0.0076 s/iter. Inference: 0.2340 s/iter. Eval: 0.1586 s/iter. Total: 0.4003 s/iter. ETA=0:01:59
+[02/25 20:07:22] mask2former INFO: Inference done 807/1092. Dataloading: 0.0076 s/iter. Inference: 0.2341 s/iter. Eval: 0.1582 s/iter. Total: 0.4001 s/iter. ETA=0:01:54
+[02/25 20:07:27] mask2former INFO: Inference done 822/1092. Dataloading: 0.0076 s/iter. Inference: 0.2337 s/iter. Eval: 0.1577 s/iter. Total: 0.3991 s/iter. ETA=0:01:47
+[02/25 20:07:33] mask2former INFO: Inference done 837/1092. Dataloading: 0.0076 s/iter. Inference: 0.2335 s/iter. Eval: 0.1572 s/iter. Total: 0.3984 s/iter. ETA=0:01:41
+[02/25 20:07:38] mask2former INFO: Inference done 850/1092. Dataloading: 0.0076 s/iter. Inference: 0.2336 s/iter. Eval: 0.1570 s/iter. Total: 0.3983 s/iter. ETA=0:01:36
+[02/25 20:07:43] mask2former INFO: Inference done 863/1092. Dataloading: 0.0075 s/iter. Inference: 0.2337 s/iter. Eval: 0.1569 s/iter. Total: 0.3983 s/iter. ETA=0:01:31
+[02/25 20:07:48] mask2former INFO: Inference done 877/1092. Dataloading: 0.0075 s/iter. Inference: 0.2336 s/iter. Eval: 0.1565 s/iter. Total: 0.3978 s/iter. ETA=0:01:25
+[02/25 20:07:53] mask2former INFO: Inference done 892/1092. Dataloading: 0.0075 s/iter. Inference: 0.2333 s/iter. Eval: 0.1562 s/iter. Total: 0.3972 s/iter. ETA=0:01:19
+[02/25 20:07:58] mask2former INFO: Inference done 905/1092. Dataloading: 0.0075 s/iter. Inference: 0.2334 s/iter. Eval: 0.1560 s/iter. Total: 0.3970 s/iter. ETA=0:01:14
+[02/25 20:08:04] mask2former INFO: Inference done 918/1092. Dataloading: 0.0075 s/iter. Inference: 0.2334 s/iter. Eval: 0.1561 s/iter. Total: 0.3972 s/iter. ETA=0:01:09
+[02/25 20:08:09] mask2former INFO: Inference done 930/1092. Dataloading: 0.0075 s/iter. Inference: 0.2333 s/iter. Eval: 0.1565 s/iter. Total: 0.3975 s/iter. ETA=0:01:04
+[02/25 20:08:14] mask2former INFO: Inference done 944/1092. Dataloading: 0.0075 s/iter. Inference: 0.2330 s/iter. Eval: 0.1564 s/iter. Total: 0.3970 s/iter. ETA=0:00:58
+[02/25 20:08:19] mask2former INFO: Inference done 956/1092. Dataloading: 0.0075 s/iter. Inference: 0.2330 s/iter. Eval: 0.1566 s/iter. Total: 0.3973 s/iter. ETA=0:00:54
+[02/25 20:08:24] mask2former INFO: Inference done 970/1092. Dataloading: 0.0075 s/iter. Inference: 0.2328 s/iter. Eval: 0.1566 s/iter. Total: 0.3970 s/iter. ETA=0:00:48
+[02/25 20:08:29] mask2former INFO: Inference done 983/1092. Dataloading: 0.0075 s/iter. Inference: 0.2328 s/iter. Eval: 0.1566 s/iter. Total: 0.3971 s/iter. ETA=0:00:43
+[02/25 20:08:34] mask2former INFO: Inference done 995/1092. Dataloading: 0.0075 s/iter. Inference: 0.2327 s/iter. Eval: 0.1570 s/iter. Total: 0.3974 s/iter. ETA=0:00:38
+[02/25 20:08:40] mask2former INFO: Inference done 1008/1092. Dataloading: 0.0076 s/iter. Inference: 0.2325 s/iter. Eval: 0.1571 s/iter. Total: 0.3973 s/iter. ETA=0:00:33
+[02/25 20:08:45] mask2former INFO: Inference done 1020/1092. Dataloading: 0.0076 s/iter. Inference: 0.2327 s/iter. Eval: 0.1574 s/iter. Total: 0.3977 s/iter. ETA=0:00:28
+[02/25 20:08:50] mask2former INFO: Inference done 1033/1092. Dataloading: 0.0076 s/iter. Inference: 0.2325 s/iter. Eval: 0.1574 s/iter. Total: 0.3976 s/iter. ETA=0:00:23
+[02/25 20:08:55] mask2former INFO: Inference done 1045/1092. Dataloading: 0.0076 s/iter. Inference: 0.2325 s/iter. Eval: 0.1576 s/iter. Total: 0.3979 s/iter. ETA=0:00:18
+[02/25 20:09:00] mask2former INFO: Inference done 1057/1092. Dataloading: 0.0076 s/iter. Inference: 0.2327 s/iter. Eval: 0.1578 s/iter. Total: 0.3983 s/iter. ETA=0:00:13
+[02/25 20:09:05] mask2former INFO: Inference done 1071/1092. Dataloading: 0.0076 s/iter. Inference: 0.2328 s/iter. Eval: 0.1575 s/iter. Total: 0.3980 s/iter. ETA=0:00:08
+[02/25 20:09:10] mask2former INFO: Inference done 1084/1092. Dataloading: 0.0076 s/iter. Inference: 0.2325 s/iter. Eval: 0.1577 s/iter. Total: 0.3979 s/iter. ETA=0:00:03
