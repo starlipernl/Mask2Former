@@ -3,6 +3,7 @@ from collections import OrderedDict
 from turtle import forward
 from typing import Tuple
 from numpy import float16
+import math
 
 import torch
 from torch import nn
@@ -180,19 +181,19 @@ class SetCriterionStereo(SetCriterion):
         gt_seg = [t["sem_seg"].unsqueeze(0) for t in targets]
         gt_seg = torch.cat(gt_seg)
         # mask_pred = outputs["pred_masks"]
-        # semseg = outputs["pred_seg"]  * 4
+        semseg = outputs["pred_seg"].squeeze(1)
         # mask_pred = F.interpolate(
         #         mask_pred[None],
         #         size=(192, gt_seg.shape[-2], gt_seg.shape[-1]),
         #         mode="trilinear",
         #         align_corners=False,
         # ).squeeze(0)
-        semseg = F.interpolate(
-                outputs['pred_seg'],
-                size=(gt_seg.shape[-2], gt_seg.shape[-1]),
-                mode="bilinear",
-                align_corners=False,
-        ).squeeze() * 4
+        # semseg = F.interpolate(
+        #         outputs['pred_seg'],
+        #         size=(gt_seg.shape[-2], gt_seg.shape[-1]),
+        #         mode="bilinear",
+        #         align_corners=False,
+        # ).squeeze() * 4
         # mask_pred = mask_pred.softmax(1)
         # classes = torch.tensor([range(1,mask_pred.shape[1]+1)]).to(mask_pred)[:,:,None,None]
         # semseg = (mask_pred * classes).sum(1)
@@ -522,6 +523,142 @@ class DispRefineLayer(nn.Module):
         
         return F.relu(disp + self.conv2d_out(output))
 
+def convbn_3d(in_planes, out_planes, kernel_size, stride, pad):
+
+    return nn.Sequential(nn.Conv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride,bias=False),
+                         nn.BatchNorm3d(out_planes))
+
+
+class hourglass(nn.Module):
+    def __init__(self, inplanes):
+        super(hourglass, self).__init__()
+
+        self.conv1 = nn.Sequential(convbn_3d(inplanes, inplanes*2, kernel_size=3, stride=(1,2,2), pad=1),
+                                   nn.ReLU(inplace=True))
+
+        self.conv2 = convbn_3d(inplanes*2, inplanes*2, kernel_size=3, stride=1, pad=1)
+
+        self.conv3 = nn.Sequential(convbn_3d(inplanes*2, inplanes*2, kernel_size=3, stride=(1,2,2), pad=1),
+                                   nn.ReLU(inplace=True))
+
+        self.conv4 = nn.Sequential(convbn_3d(inplanes*2, inplanes*2, kernel_size=3, stride=1, pad=1),
+                                   nn.ReLU(inplace=True))
+
+        self.conv5 = nn.Sequential(nn.ConvTranspose3d(inplanes*2, inplanes*2, kernel_size=3, padding=1, output_padding=(0,1,1), stride=(1,2,2),bias=False),
+                                   nn.BatchNorm3d(inplanes*2)) #+conv2
+
+        self.conv6 = nn.Sequential(nn.ConvTranspose3d(inplanes*2, inplanes, kernel_size=3, padding=1, output_padding=(0,1,1), stride=(1,2,2),bias=False),
+                                   nn.BatchNorm3d(inplanes)) #+x
+
+    def forward(self, x ,presqu, postsqu):
+        
+        out  = self.conv1(x) #in:1/4 out:1/8
+        pre  = self.conv2(out) #in:1/8 out:1/8
+        if postsqu is not None:
+           pre = F.relu(pre + postsqu, inplace=True)
+        else:
+           pre = F.relu(pre, inplace=True)
+
+        out  = self.conv3(pre) #in:1/8 out:1/16
+        out  = self.conv4(out) #in:1/16 out:1/16
+
+        if presqu is not None:
+           post = F.relu(self.conv5(out)+presqu, inplace=True) #in:1/16 out:1/8
+        else:
+           post = F.relu(self.conv5(out)+pre, inplace=True) 
+
+        out  = self.conv6(post)  #in:1/8 out:1/4
+
+        return out, pre, post
+
+class PSMNet(nn.Module):
+    def __init__(self, maxdisp, fine_disp_levels):
+        super(PSMNet, self).__init__()
+        self.maxdisp = maxdisp
+        self.fine_disp_levels = fine_disp_levels
+
+        self.dres0 = nn.Sequential(convbn_3d(512, 256, 3, 1, 1),
+                                     nn.ReLU(inplace=True),
+                                     convbn_3d(256, 32, 3, 1, 1),
+                                     nn.ReLU(inplace=True))
+
+        self.dres1 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
+                                   nn.ReLU(inplace=True),
+                                   convbn_3d(32, 32, 3, 1, 1)) 
+
+        self.dres2 = hourglass(32)
+
+        # self.dres3 = hourglass(32)
+
+        # self.dres4 = hourglass(32)
+
+        self.classif1 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
+                                      nn.ReLU(inplace=True),
+                                      nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
+
+        # self.classif2 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
+        #                               nn.ReLU(inplace=True),
+        #                               nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
+
+        # self.classif3 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
+        #                               nn.ReLU(inplace=True),
+        #                               nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.Conv3d):
+                n = m.kernel_size[0] * m.kernel_size[1]*m.kernel_size[2] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.BatchNorm3d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.Linear):
+                m.bias.data.zero_()
+
+
+    def forward(self, refimg_fea, targetimg_fea):
+
+        #matching
+        cost = torch.FloatTensor(refimg_fea.size()[0], refimg_fea.size()[1]*2, self.fine_disp_levels+1,  refimg_fea.size()[2],  refimg_fea.size()[3]).zero_().to(refimg_fea)
+
+        for i in range(0,self.fine_disp_levels+1):
+            if i > 0 :
+             cost[:, :refimg_fea.size()[1], i, :,i:]   = refimg_fea[:,:,:,i:]
+             cost[:, refimg_fea.size()[1]:, i, :,i:] = targetimg_fea[:,:,:,:-i]
+            else:
+             cost[:, :refimg_fea.size()[1], i, :,:]   = refimg_fea
+             cost[:, refimg_fea.size()[1]:, i, :,:]   = targetimg_fea
+
+        cost = cost.contiguous()
+
+        cost0 = self.dres0(cost)
+        cost0 = self.dres1(cost0) + cost0
+
+        # out1, pre1, post1 = self.dres2(cost0, None, None)
+        out1, _, _ = self.dres2(cost0, None, None) 
+        out1 = out1+cost0
+
+        # out2, pre2, post2 = self.dres3(out1, pre1, post1) 
+        # out2 = out2+cost0
+
+        # out3, pre3, post3 = self.dres4(out2, pre1, post2) 
+        # out3 = out3+cost0
+
+        out1 = self.classif1(out1)
+        # cost2 = self.classif2(out2) + cost1
+        # cost3 = self.classif3(out3) + cost2
+
+        out1 = out1.squeeze(1).softmax(1)
+        disp_levels = torch.tensor([range(out1.shape[1])]).to(out1)[:,:,None,None]
+        out1 = (out1 * disp_levels).sum(1, keepdim=True)
+
+        return out1
+
 @META_ARCH_REGISTRY.register()
 class MaskFormerStereo(nn.Module):
     """
@@ -619,7 +756,8 @@ class MaskFormerStereo(nn.Module):
 
         sem_seg_head = build_sem_seg_head(cfg, seg_head_input_shape)
 
-        refinement_layer = DispRefineLayer(in_channel=cfg.MODEL.SEM_SEG_HEAD.MASK_DIM+1)
+        refinement_layer = PSMNet(192, 4)
+        # refinement_layer = DispRefineLayer(in_channel=cfg.MODEL.SEM_SEG_HEAD.MASK_DIM+1)
         # refinement_layer = DispRefineLayer(in_channel=513)
 
         # Loss parameters:
@@ -749,15 +887,33 @@ class MaskFormerStereo(nn.Module):
 
         outputs = self.sem_seg_head(features)
 
+
+        fine_seg = self.refinement_layer(features_left['res2'], features_right['res2'])
+        fine_seg = F.interpolate(
+            fine_seg,
+            size=(images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
+            mode="bilinear",
+            align_corners=False,
+        )
+
+        #interpolate pred mask array
+        outputs['pred_masks'] = F.interpolate(
+            outputs['pred_masks'][None],
+            size=(192, images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
+            mode="trilinear",
+            align_corners=False,
+        ).squeeze(0)
+
         # calculate seg masks
-        outputs['pred_seg'] = calc_disp(outputs['pred_masks'])
-        outputs['pred_seg'] = self.refinement_layer(outputs['mask_features'], outputs['pred_seg'])
+        outputs['pred_seg'] = F.relu(calc_disp(outputs['pred_masks']) - fine_seg)
+        # outputs['pred_seg'] = self.refinement_layer(outputs['mask_features'], outputs['pred_seg'])
         # outputs['pred_seg'] = self.refinement_layer(features['res2'], outputs['pred_seg'])
 
-        if self.training:
-            if 'aux_outputs' in outputs.keys():
-                for i in range(len(outputs['aux_outputs'])):
-                    outputs['aux_outputs'][i]['pred_seg'] = calc_disp(outputs['aux_outputs'][i]['pred_masks'])
+
+        # if self.training:
+        #     if 'aux_outputs' in outputs.keys():
+        #         for i in range(len(outputs['aux_outputs'])):
+        #             outputs['aux_outputs'][i]['pred_seg'] = calc_disp(outputs['aux_outputs'][i]['pred_masks'])
                     # outputs['aux_outputs'][i]['pred_seg'] = self.refinement_layer(
                     #     outputs['aux_outputs'][i]['mask_features'], 
                     #     outputs['aux_outputs'][i]['pred_seg']
@@ -810,13 +966,13 @@ class MaskFormerStereo(nn.Module):
             #     mode="trilinear",
             #     align_corners=False,
             # ).squeeze(0)
-            mask_pred_results = F.interpolate(
-                # mask_pred_results[:,None, ...],
-                mask_pred_results,
-                size=(images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
-                mode="bilinear",
-                align_corners=False,
-            )
+            # mask_pred_results = F.interpolate(
+            #     # mask_pred_results[:,None, ...],
+            #     mask_pred_results,
+            #     size=(images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
+            #     mode="bilinear",
+            #     align_corners=False,
+            # )
 
             del outputs
 
@@ -884,7 +1040,7 @@ class MaskFormerStereo(nn.Module):
         # # semseg = (mask_pred * mask_cls).sum(0)
         # # semseg = (semseg * classes).sum(0)
         # semseg = (mask_pred * classes).sum(0)
-        return mask_pred * 4
+        return mask_pred
 
     def panoptic_inference(self, mask_cls, mask_pred):
         scores, labels = F.softmax(mask_cls, dim=-1).max(-1)

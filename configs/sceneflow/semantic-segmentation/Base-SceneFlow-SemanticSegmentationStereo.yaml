@@ -61,4 +61,4 @@ DATALOADER:
   FILTER_EMPTY_ANNOTATIONS: True
   NUM_WORKERS: 4
 VERSION: 2
-OUTPUT_DIR: './work_dirs/r101_48classes_fixedmatching_finesmoothl1_refinelayerdeltas_resfeatures'
+OUTPUT_DIR: './work_dirs/r101_48classes_fixedmatching_finesmoothl1_refinepsmcost'

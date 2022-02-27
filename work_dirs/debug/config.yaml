@@ -350,7 +350,7 @@ MODEL:
     QK_SCALE: null
     USE_CHECKPOINT: false
     WINDOW_SIZE: 7
-  WEIGHTS: /home/nstarli/Mask2Former/work_dirs/r101_48classes_fixedmatching_finesmoothl1_refinelayerdeltas_fpnoutrefine_highmaskweight_smallnetwork/model_0049999.pth
+  WEIGHTS: detectron2://ImageNetPretrained/torchvision/R-50.pkl
 OUTPUT_DIR: ./work_dirs/debug
 SEED: -1
 SOLVER:
@@ -366,7 +366,7 @@ SOLVER:
     ENABLED: true
     NORM_TYPE: 2.0
   GAMMA: 0.1
-  IMS_PER_BATCH: 4
+  IMS_PER_BATCH: 8
   LR_SCHEDULER_NAME: WarmupPolyLR
   MAX_ITER: 60000
   MOMENTUM: 0.9

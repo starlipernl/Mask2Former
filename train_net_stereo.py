@@ -475,6 +475,9 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
             # pred = np.array(output.round(), dtype=np.long) #* 4.0
             pred = np.array(output, dtype=np.float)
 
+            if not all([g == p for g, p in zip(gt.shape, pred.shape)]):
+                raise Exception('Predicted and ground truth arrays not the same size')
+
             # gt[gt > self._num_classes] = 0
             # pred[pred > self._num_classes] = 0
 

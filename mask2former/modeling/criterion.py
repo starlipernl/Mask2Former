@@ -263,9 +263,10 @@ class SetCriterion(nn.Module):
             for i, aux_outputs in enumerate(outputs["aux_outputs"]):
                 indices = self.matcher(aux_outputs, targets)
                 for loss in self.losses:
-                    l_dict = self.get_loss(loss, aux_outputs, targets, indices, num_masks)
-                    l_dict = {k + f"_{i}": v for k, v in l_dict.items()}
-                    losses.update(l_dict)
+                    if loss != 'segs':
+                        l_dict = self.get_loss(loss, aux_outputs, targets, indices, num_masks)
+                        l_dict = {k + f"_{i}": v for k, v in l_dict.items()}
+                        losses.update(l_dict)
 
         return losses
 
