@@ -80,9 +80,9 @@ MODEL:
   LOAD_PROPOSALS: false
   MASK_FORMER:
     CLASS_WEIGHT: 0.0
-    DEC_LAYERS: 4
+    DEC_LAYERS: 10
     DEEP_SUPERVISION: true
-    DICE_WEIGHT: 1.0
+    DICE_WEIGHT: 5.0
     DIM_FEEDFORWARD: 2048
     DROPOUT: 0.0
     ENC_LAYERS: 0
@@ -135,7 +135,7 @@ MODEL:
     - false
     - false
     - false
-    DEPTH: 50
+    DEPTH: 101
     NORM: SyncBN
     NUM_GROUPS: 1
     OUT_FEATURES:
@@ -156,7 +156,7 @@ MODEL:
     WIDTH_PER_GROUP: 64
   RETINANET:
     BBOX_REG_LOSS_TYPE: smooth_l1
-    BBOX_REG_WEIGHTS: &id002
+    BBOX_REG_WEIGHTS:
     - 1.0
     - 1.0
     - 1.0
@@ -186,8 +186,7 @@ MODEL:
     TOPK_CANDIDATES_TEST: 1000
   ROI_BOX_CASCADE_HEAD:
     BBOX_REG_WEIGHTS:
-    - &id001
-      - 10.0
+    - - 10.0
       - 10.0
       - 5.0
       - 5.0
@@ -206,7 +205,11 @@ MODEL:
   ROI_BOX_HEAD:
     BBOX_REG_LOSS_TYPE: smooth_l1
     BBOX_REG_LOSS_WEIGHT: 1.0
-    BBOX_REG_WEIGHTS: *id001
+    BBOX_REG_WEIGHTS:
+    - 10.0
+    - 10.0
+    - 5.0
+    - 5.0
     CLS_AGNOSTIC_BBOX_REG: false
     CONV_DIM: 256
     FC_DIM: 1024
@@ -265,7 +268,11 @@ MODEL:
     BATCH_SIZE_PER_IMAGE: 256
     BBOX_REG_LOSS_TYPE: smooth_l1
     BBOX_REG_LOSS_WEIGHT: 1.0
-    BBOX_REG_WEIGHTS: *id002
+    BBOX_REG_WEIGHTS:
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
     BOUNDARY_THRESH: -1
     CONV_DIMS:
     - -1
@@ -319,7 +326,7 @@ MODEL:
     - 48
     PROJECT_FEATURES:
     - res2
-    TRANSFORMER_ENC_LAYERS: 3
+    TRANSFORMER_ENC_LAYERS: 6
     USE_DEPTHWISE_SEPARABLE_CONV: false
   SWIN:
     APE: false
@@ -350,7 +357,7 @@ MODEL:
     QK_SCALE: null
     USE_CHECKPOINT: false
     WINDOW_SIZE: 7
-  WEIGHTS: detectron2://ImageNetPretrained/torchvision/R-50.pkl
+  WEIGHTS: /home/nstarli/Mask2Former/work_dirs/r101_48classes_fixedmatching_finesmoothl1_interpolatedisp_segweight0p1/model_final.pth
 OUTPUT_DIR: ./work_dirs/debug
 SEED: -1
 SOLVER:
@@ -358,17 +365,18 @@ SOLVER:
     ENABLED: true
   BACKBONE_MULTIPLIER: 1.0
   BASE_LR: 0.0001
+  BASE_LR_END: 0.0
   BIAS_LR_FACTOR: 1.0
-  CHECKPOINT_PERIOD: 2500
+  CHECKPOINT_PERIOD: 10000
   CLIP_GRADIENTS:
     CLIP_TYPE: full_model
     CLIP_VALUE: 0.01
     ENABLED: true
     NORM_TYPE: 2.0
   GAMMA: 0.1
-  IMS_PER_BATCH: 8
+  IMS_PER_BATCH: 4
   LR_SCHEDULER_NAME: WarmupPolyLR
-  MAX_ITER: 60000
+  MAX_ITER: 120000
   MOMENTUM: 0.9
   NESTEROV: false
   OPTIMIZER: ADAMW

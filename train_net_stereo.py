@@ -30,7 +30,7 @@ import detectron2.utils.comm as comm
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.config import get_cfg
 from detectron2.data import DatasetCatalog, MetadataCatalog, build_detection_train_loader, build_detection_test_loader
-from detectron2.data.datasets.cityscapes import load_cityscapes_stereo
+# from detectron2.data.datasets.cityscapes import load_cityscapes_stereo
 from detectron2.engine import (
     DefaultTrainer,
     default_argument_parser,
@@ -444,7 +444,7 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
     """
 
     def reset(self):
-        self._conf_matrix = np.zeros((self._num_classes + 1, self._num_classes + 1), dtype=np.int64)
+        self._conf_matrix = np.zeros((self._num_classes, self._num_classes), dtype=np.int64)
         # self._conf_matrix = np.zeros((192 + 1, 192 + 1), dtype=np.int64)
         self._predictions = []
         self.epe = 0
@@ -482,7 +482,7 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
             # pred[pred > self._num_classes] = 0
 
             gt[gt > 192] = 0
-            pred[pred > 192] = 0
+            pred[gt > 192] = 0
 
             valid_mask = gt > 0
 
@@ -494,21 +494,21 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
                 self.one_pix_err += np.sum(disp_error > 1.0 ) / np.sum(valid_mask)
                 self.three_pix_err += np.sum(disp_error > 3.0 ) / np.sum(valid_mask)
 
-            pred = np.array(torch.round(output)/4, dtype=np.int)
+            # pred = np.array(torch.round(output)/4, dtype=np.int)
             
 
-            gt = np.ceil(gt/4.0)
-            gt = gt.astype(np.int)
-            # gt = np.array(gt.round(), dtype=np.int)
+            # gt = np.ceil(gt/4.0)
+            # gt = gt.astype(np.int)
+            # # gt = np.array(gt.round(), dtype=np.int)
 
 
-            gt[gt > self._num_classes] = 0
-            pred[pred > self._num_classes] = 0
+            # gt[gt >= self._num_classes] = 0
+            # pred[gt >= self._num_classes] = 0
 
-            # gt[gt > 192] = 0
-            # pred[pred > 192] = 0
+            # # gt[gt > 192] = 0
+            # # pred[pred > 192] = 0
 
-            valid_mask = gt > 0
+            # valid_mask = gt > 0
 
             # gt[gt == self._ignore_label] = self._num_classes
 
@@ -519,17 +519,17 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
             #     self.three_pix_err += np.sum(disp_error > 3.0 ) / np.sum(valid_mask)
                 
 
-            self._conf_matrix += np.bincount(
-                (self._num_classes + 1) * pred.reshape(-1) + gt.reshape(-1),
-                minlength=self._conf_matrix.size,
-            ).reshape(self._conf_matrix.shape)
-
             # self._conf_matrix += np.bincount(
-            #     (192 + 1) * pred.reshape(-1) + gt.reshape(-1),
+            #     (self._num_classes) * pred.reshape(-1) + gt.reshape(-1),
             #     minlength=self._conf_matrix.size,
             # ).reshape(self._conf_matrix.shape)
 
-            self._predictions.extend(self.encode_json_sem_seg(pred, input["file_name"])) 
+            # # self._conf_matrix += np.bincount(
+            # #     (192 + 1) * pred.reshape(-1) + gt.reshape(-1),
+            # #     minlength=self._conf_matrix.size,
+            # # ).reshape(self._conf_matrix.shape)
+
+            # self._predictions.extend(self.encode_json_sem_seg(pred, input["file_name"])) 
 
     def evaluate(self):
         """
@@ -544,61 +544,61 @@ class SceneFlowStereoEvaluator(SemSegEvaluator):
         """
         if self._distributed:
             synchronize()
-            conf_matrix_list = all_gather(self._conf_matrix)
-            self._predictions = all_gather(self._predictions)
+            # conf_matrix_list = all_gather(self._conf_matrix)
+            # self._predictions = all_gather(self._predictions)
             epe_list = all_gather(self.epe)
             self.epe = np.mean(np.array(epe_list))
             one_pix_err_list = all_gather(self.one_pix_err)
             self.one_pix_err = np.mean(np.array(one_pix_err_list))
             three_pix_err_list = all_gather(self.three_pix_err)
             self.three_pix_err = np.mean(np.array(three_pix_err_list))
-            self._predictions = list(itertools.chain(*self._predictions))
+            # self._predictions = list(itertools.chain(*self._predictions))
             if not is_main_process():
                 return
 
-            self._conf_matrix = np.zeros_like(self._conf_matrix)
-            for conf_matrix in conf_matrix_list:
-                self._conf_matrix += conf_matrix
+            # self._conf_matrix = np.zeros_like(self._conf_matrix)
+            # for conf_matrix in conf_matrix_list:
+            #     self._conf_matrix += conf_matrix
 
-        if self._output_dir:
-            PathManager.mkdirs(self._output_dir)
-            file_path = os.path.join(self._output_dir, "sem_seg_predictions.json")
-            with PathManager.open(file_path, "w") as f:
-                f.write(json.dumps(self._predictions))
+        # if self._output_dir:
+        #     PathManager.mkdirs(self._output_dir)
+        #     file_path = os.path.join(self._output_dir, "sem_seg_predictions.json")
+        #     with PathManager.open(file_path, "w") as f:
+        #         f.write(json.dumps(self._predictions))
 
-        acc = np.full(self._num_classes, np.nan, dtype=np.float)
-        iou = np.full(self._num_classes, np.nan, dtype=np.float)
-        tp = self._conf_matrix.diagonal()[:-1].astype(np.float)
-        pos_gt = np.sum(self._conf_matrix[:-1, :-1], axis=0).astype(np.float)
-        class_weights = pos_gt / np.sum(pos_gt)
-        pos_pred = np.sum(self._conf_matrix[:-1, :-1], axis=1).astype(np.float)
-        acc_valid = pos_gt > 0
-        acc[acc_valid] = tp[acc_valid] / pos_gt[acc_valid]
-        iou_valid = (pos_gt + pos_pred) > 0
-        union = pos_gt + pos_pred - tp
-        iou[acc_valid] = tp[acc_valid] / union[acc_valid]
-        macc = np.sum(acc[acc_valid]) / np.sum(acc_valid)
-        miou = np.sum(iou[acc_valid]) / np.sum(iou_valid)
-        fiou = np.sum(iou[acc_valid] * class_weights[acc_valid])
-        pacc = np.sum(tp) / np.sum(pos_gt)
+        # acc = np.full(self._num_classes, np.nan, dtype=np.float)
+        # iou = np.full(self._num_classes, np.nan, dtype=np.float)
+        # tp = self._conf_matrix.diagonal()[:-1].astype(np.float)
+        # pos_gt = np.sum(self._conf_matrix[:-1, :-1], axis=0).astype(np.float)
+        # class_weights = pos_gt / np.sum(pos_gt)
+        # pos_pred = np.sum(self._conf_matrix[:-1, :-1], axis=1).astype(np.float)
+        # acc_valid = pos_gt > 0
+        # acc[acc_valid] = tp[acc_valid] / pos_gt[acc_valid]
+        # iou_valid = (pos_gt + pos_pred) > 0
+        # union = pos_gt + pos_pred - tp
+        # iou[acc_valid] = tp[acc_valid] / union[acc_valid]
+        # macc = np.sum(acc[acc_valid]) / np.sum(acc_valid)
+        # miou = np.sum(iou[acc_valid]) / np.sum(iou_valid)
+        # fiou = np.sum(iou[acc_valid] * class_weights[acc_valid])
+        # pacc = np.sum(tp) / np.sum(pos_gt)
 
         res = {}
         res["epe"] = self.epe
         res["error_1pix"] = self.one_pix_err
         res["error_3pix"] = self.three_pix_err
-        res["mIoU"] = 100 * miou
-        res["fwIoU"] = 100 * fiou
-        for i, name in enumerate(self._class_names):
-            res["IoU-{}".format(name)] = 100 * iou[i]
-        res["mACC"] = 100 * macc
-        res["pACC"] = 100 * pacc
-        for i, name in enumerate(self._class_names):
-            res["ACC-{}".format(name)] = 100 * acc[i]
+        # res["mIoU"] = 100 * miou
+        # res["fwIoU"] = 100 * fiou
+        # for i, name in enumerate(self._class_names):
+        #     res["IoU-{}".format(name)] = 100 * iou[i]
+        # res["mACC"] = 100 * macc
+        # res["pACC"] = 100 * pacc
+        # for i, name in enumerate(self._class_names):
+        #     res["ACC-{}".format(name)] = 100 * acc[i]
 
-        if self._output_dir:
-            file_path = os.path.join(self._output_dir, "sem_seg_evaluation.pth")
-            with PathManager.open(file_path, "wb") as f:
-                torch.save(res, f)
+        # if self._output_dir:
+        #     file_path = os.path.join(self._output_dir, "sem_seg_evaluation.pth")
+        #     with PathManager.open(file_path, "wb") as f:
+        #         torch.save(res, f)
         results = OrderedDict({"sem_seg": res})
         self._logger.info(results)
         return results
@@ -632,8 +632,8 @@ def register_cityscapes_stereo(root):
         )
 
 SCENEFLOW_STEREO_SPLITS = {
-    "sceneflow_train": "/home/Datasets/sceneflow/lists/sceneflow_train.list",
-    "sceneflow_test": "/home/Datasets/sceneflow/lists/sceneflow_test.list",
+    "sceneflow_train": "/home/nstarli/Mask2Former/data_lists/sceneflow_train.list",
+    "sceneflow_test": "/home/nstarli/Mask2Former/data_lists/sceneflow_test.list",
 }
 
 def register_sceneflow_stereo(cfg):
@@ -653,7 +653,7 @@ def register_sceneflow_stereo(cfg):
         MetadataCatalog.get(key).set(
             image_dir=image_dir,
             gt_dir=disp_dir,
-            ignore_label=0,
+            ignore_label=255,
             stuff_classes=stuff_classes,
         )
 

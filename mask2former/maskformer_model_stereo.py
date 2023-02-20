@@ -3,6 +3,7 @@ from collections import OrderedDict
 from turtle import forward
 from typing import Tuple
 from numpy import float16
+import numpy as np
 import math
 
 import torch
@@ -25,6 +26,7 @@ from detectron2.utils.memory import retry_if_cuda_oom
 
 from .modeling.criterion import SetCriterion, calculate_uncertainty, dice_loss_jit, sigmoid_ce_loss_jit
 from .modeling.matcher import HungarianMatcher
+from .modeling.pixel_decoder.fpn import BasePixelDecoder
 
 from detectron2.utils.comm import get_world_size
 from detectron2.projects.point_rend.point_features import (
@@ -50,7 +52,7 @@ def smooth_l1_loss(
         Loss tensor
     """
 
-    loss = F.smooth_l1_loss(inputs, targets, beta=0.3, reduction="mean")
+    loss = F.smooth_l1_loss(inputs, targets, beta=1.0, reduction="mean")
 
     return loss #.mean(1).sum() / num_masks
 
@@ -197,7 +199,7 @@ class SetCriterionStereo(SetCriterion):
         # mask_pred = mask_pred.softmax(1)
         # classes = torch.tensor([range(1,mask_pred.shape[1]+1)]).to(mask_pred)[:,:,None,None]
         # semseg = (mask_pred * classes).sum(1)
-        valid_mask = gt_seg != 0
+        valid_mask = gt_seg <= 192
         loss_seg = smooth_l1_loss(semseg[valid_mask], gt_seg[valid_mask].float(), num_masks)
         losses = {"loss_seg": loss_seg}
         return losses
@@ -402,7 +404,7 @@ class FixedMatcher(nn.Module):
 
             tgt_ids = targets[b]["labels"]
             # tgt_id_list = [i-1 for i in tgt_ids]
-            b_ind = (tgt_ids-1, torch.arange(0, len(tgt_ids)))
+            b_ind = (tgt_ids, torch.arange(0, len(tgt_ids)))
             indices.append(b_ind)
 
         return [
@@ -464,7 +466,7 @@ class UpsampleMasks(nn.Module):
 
 def calc_disp(masks):
     masks = masks.softmax(1)
-    disp_levels = torch.tensor([range(1,masks.shape[1]+1)]).to(masks)[:,:,None,None]
+    disp_levels = torch.tensor([range(0,masks.shape[1])]).to(masks)[:,:,None,None]
     return (masks * disp_levels).sum(1, keepdim=True)
 
 
@@ -572,27 +574,28 @@ class hourglass(nn.Module):
         return out, pre, post
 
 class PSMNet(nn.Module):
-    def __init__(self, maxdisp, fine_disp_levels):
+    def __init__(self, maxdisp, fine_disp_levels, coarse_disp_levels):
         super(PSMNet, self).__init__()
         self.maxdisp = maxdisp
         self.fine_disp_levels = fine_disp_levels
+        self.coarse_disp_levels = coarse_disp_levels
 
-        self.dres0 = nn.Sequential(convbn_3d(512, 256, 3, 1, 1),
+        self.dres0 = nn.Sequential(convbn_3d(128, 64, 3, 1, 1),
                                      nn.ReLU(inplace=True),
-                                     convbn_3d(256, 32, 3, 1, 1),
+                                     convbn_3d(64, 64, 3, 1, 1),
                                      nn.ReLU(inplace=True))
 
-        self.dres1 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
+        self.dres1 = nn.Sequential(convbn_3d(64, 64, 3, 1, 1),
                                    nn.ReLU(inplace=True),
-                                   convbn_3d(32, 32, 3, 1, 1)) 
+                                   convbn_3d(64, 64, 3, 1, 1)) 
 
-        self.dres2 = hourglass(32)
+        self.dres2 = hourglass(64)
 
         # self.dres3 = hourglass(32)
 
         # self.dres4 = hourglass(32)
 
-        self.classif1 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
+        self.classif1 = nn.Sequential(convbn_3d(64, 32, 3, 1, 1),
                                       nn.ReLU(inplace=True),
                                       nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
 
@@ -621,18 +624,106 @@ class PSMNet(nn.Module):
                 m.bias.data.zero_()
 
 
-    def forward(self, refimg_fea, targetimg_fea):
+    def forward_old(self, left_feat, right_feat, coarse_disp):
 
         #matching
-        cost = torch.FloatTensor(refimg_fea.size()[0], refimg_fea.size()[1]*2, self.fine_disp_levels+1,  refimg_fea.size()[2],  refimg_fea.size()[3]).zero_().to(refimg_fea)
+        cost = torch.FloatTensor(left_feat.size()[0], left_feat.size()[1]*2, self.fine_disp_levels*2+1,  left_feat.size()[2],  left_feat.size()[3]).zero_().to(left_feat)
+        y_idx, x_idx = torch.meshgrid(torch.arange(0,left_feat.shape[2]), torch.arange(0,left_feat.shape[3]))
+        # coarse_disp = coarse_disp.expand(-1, refimg_fea.size()[1], -1, -1)
 
-        for i in range(0,self.fine_disp_levels+1):
-            if i > 0 :
-             cost[:, :refimg_fea.size()[1], i, :,i:]   = refimg_fea[:,:,:,i:]
-             cost[:, refimg_fea.size()[1]:, i, :,i:] = targetimg_fea[:,:,:,:-i]
+        # image is 1/4 resolution
+        coarse_disp = coarse_disp/4.0
+
+        disp_grid = torch.cat([(x_idx.expand(coarse_disp.shape[0],-1,-1).to(coarse_disp)-coarse_disp).unsqueeze(-1)/(left_feat.shape[3]-1)*2-1, (y_idx.expand(coarse_disp.shape[0],-1,-1).unsqueeze(-1).to(coarse_disp)/(left_feat.shape[2]-1))*2-1], dim=-1)
+
+        for cost_idx, i in enumerate(range(-self.fine_disp_levels,self.fine_disp_levels+1)):
+            i_norm = i / (4.0*left_feat.size()[3]) * 2
+            if i != 0 :
+                cost[:, :left_feat.size()[1], cost_idx, :, :] = F.grid_sample(right_feat, disp_grid - torch.tensor([i_norm,0]).to(disp_grid))
+                cost[:, left_feat.size()[1]:, cost_idx, :, :] = left_feat
             else:
-             cost[:, :refimg_fea.size()[1], i, :,:]   = refimg_fea
-             cost[:, refimg_fea.size()[1]:, i, :,:]   = targetimg_fea
+                cost[:, :left_feat.size()[1], cost_idx, :,:]   = F.grid_sample(right_feat, disp_grid)
+                cost[:, left_feat.size()[1]:, cost_idx, :,:]   = left_feat
+
+        cost = cost.contiguous()
+
+        cost0 = self.dres0(cost)
+        cost0 = self.dres1(cost0) + cost0
+
+        out1, pre1, post1 = self.dres2(cost0, None, None)
+        # out1, _, _ = self.dres2(cost0, None, None) 
+        out1 = out1+cost0
+
+        # out2, pre2, post2 = self.dres3(out1, pre1, post1) 
+        # out2 = out2+cost0
+
+        # out3, pre3, post3 = self.dres4(out2, pre1, post2) 
+        # out3 = out3+cost0
+
+        out1 = self.classif1(out1)
+        # out1 = self.classif1(out3)
+        # cost2 = self.classif2(out2) + cost1
+        # cost3 = self.classif3(out3) + cost2
+
+        out1 = out1.squeeze(1).softmax(1)
+        disp_levels = torch.tensor([range(-self.fine_disp_levels,self.fine_disp_levels+1)]).to(out1)[:,:,None,None]
+        out1 = (out1 * disp_levels).sum(1, keepdim=True)
+
+        return out1 + coarse_disp.unsqueeze(1) * 4.0
+
+    def forward(self, left_feat, right_feat, coarse_disp):
+
+        coarse_disp = coarse_disp.softmax(1).argmax(1, keepdim=True).expand(-1, left_feat.shape[1], -1, -1)      
+        
+        coarse_shifted_feats = torch.Tensor(right_feat.shape).zero_().to(right_feat)
+
+        for i in range(self.coarse_disp_levels):
+            masked_feats = torch.zeros_like(right_feat)
+            masked_feats[coarse_disp==i] = left_feat[coarse_disp==i]
+            if i > 0 :
+                coarse_shifted_feats[:, :, :, :-i] += masked_feats[:, :, :, i:]
+            else:
+                coarse_shifted_feats += masked_feats
+
+        coarse_shifted_feats = coarse_shifted_feats.contiguous()
+
+        coarse_shifted_feats = F.interpolate(
+            coarse_shifted_feats,
+            size=(coarse_shifted_feats.shape[-2]*4, coarse_shifted_feats.shape[-1]*4),
+            mode="bilinear"
+        )
+
+        right_feat = F.interpolate(
+            right_feat,
+            size=(right_feat.shape[-2]*4, right_feat.shape[-1]*4),
+            mode="bilinear"
+        )
+
+        cost = torch.FloatTensor(right_feat.size()[0], right_feat.size()[1]*2, self.fine_disp_levels*2+1,  right_feat.size()[2],  right_feat.size()[3]).zero_().to(right_feat)
+
+        # y_idx, x_idx = torch.meshgrid(torch.arange(0,right_feat.shape[2]), torch.arange(0,right_feat.shape[3]))
+
+        # disp_grid = torch.cat([(x_idx.expand(coarse_disp.shape[0],-1,-1)).unsqueeze(-1)/(left_feat.shape[3]-1)*2-1, (y_idx.expand(coarse_disp.shape[0],-1,-1).unsqueeze(-1)/(left_feat.shape[2]-1))*2-1], dim=-1)
+
+        # for cost_idx, i in enumerate(range(-self.fine_disp_levels,self.fine_disp_levels+1)):
+        #     i_norm = i / (4.0*left_feat.size()[3]) * 2
+        #     if i != 0 :
+        #         cost[:, :left_feat.size()[1], cost_idx, :, :] = F.grid_sample(coarse_shifted_feats, (disp_grid + torch.tensor([i_norm,0])).to(coarse_shifted_feats))
+        #         cost[:, left_feat.size()[1]:, cost_idx, :, :] = right_feat
+        #     else:
+        #         cost[:, :left_feat.size()[1], cost_idx, :,:]   = coarse_shifted_feats
+        #         cost[:, left_feat.size()[1]:, cost_idx, :,:]   = right_feat
+
+        for cost_idx, i in enumerate(range(-self.fine_disp_levels,self.fine_disp_levels+1)):
+            if i > 0 :
+                cost[:, :left_feat.size()[1], cost_idx, :, i:] = coarse_shifted_feats[:,:,:,i:]
+                cost[:, left_feat.size()[1]:, cost_idx, :, i:] = right_feat[:,:,:,:-i]
+            elif i == 0:
+                cost[:, :left_feat.size()[1], cost_idx, :,:]   = coarse_shifted_feats
+                cost[:, left_feat.size()[1]:, cost_idx, :,:]   = right_feat
+            elif i < 0 :
+                cost[:, :left_feat.size()[1], cost_idx, :, :i] = coarse_shifted_feats[:,:,:,:i]
+                cost[:, left_feat.size()[1]:, cost_idx, :, :i] = right_feat[:,:,:,-i:]
 
         cost = cost.contiguous()
 
@@ -654,10 +745,75 @@ class PSMNet(nn.Module):
         # cost3 = self.classif3(out3) + cost2
 
         out1 = out1.squeeze(1).softmax(1)
-        disp_levels = torch.tensor([range(out1.shape[1])]).to(out1)[:,:,None,None]
+        disp_levels = torch.tensor([range(-self.fine_disp_levels,self.fine_disp_levels+1)]).to(out1)[:,:,None,None]
         out1 = (out1 * disp_levels).sum(1, keepdim=True)
 
-        return out1
+        coarse_disp = F.interpolate(
+            coarse_disp.float(),
+            size=(coarse_disp.shape[-2]*4, coarse_disp.shape[-1]*4),
+            mode="nearest"
+        )
+
+        return out1 + coarse_disp[:,0:1] * 4.0
+
+class CosineSimMatching(nn.Module):
+    def __init__(self, fine_disp_levels=4, resolution=1.0):
+        super().__init__()
+        self.fine_disp_levels = fine_disp_levels
+        self.res = resolution
+        self.similarity = torch.nn.CosineSimilarity(dim=2)
+
+    def forward(self, left_feat, right_feat, coarse_disp):
+
+        #debug 
+        # left_feat = left_feat[0]
+        # right_feat = right_feat[0]
+        # features at 1/4 resolution
+        coarse_disp = coarse_disp / 4.0
+        y_idx, x_idx = torch.meshgrid(torch.arange(0,left_feat.shape[2]), torch.arange(0,left_feat.shape[3]))
+        y_idx = y_idx.expand(coarse_disp.shape[0],-1,-1).unsqueeze(-1).to(coarse_disp)
+        # shift x by coarse disparity estimate
+        x_idx = (x_idx.expand(coarse_disp.shape[0],-1,-1).to(coarse_disp)-coarse_disp).unsqueeze(-1)
+
+        # normalize between -1 to 1 for grid_sample
+        x_idx = x_idx/(left_feat.shape[3]-1)*2-1
+        y_idx = y_idx/(left_feat.shape[2]-1)*2-1
+        disp_grid = torch.cat([x_idx, y_idx], dim=-1)
+
+        cost = torch.FloatTensor(left_feat.size()[0], int((self.fine_disp_levels*2)/self.res+1), left_feat.size()[1], left_feat.size()[2],  left_feat.size()[3]).zero_().to(left_feat)
+
+        # 1/4 resolution
+        fine_levels = torch.arange(-self.fine_disp_levels,self.fine_disp_levels+self.res, self.res)/4.0
+        
+
+        for cost_idx, i in enumerate(fine_levels):
+            # normalized -1 to 1
+            i_norm = i / (left_feat.size()[3]) * 2
+            if i != 0 :
+                cost[:, cost_idx, :, :, :] = F.grid_sample(right_feat, disp_grid + torch.tensor([i_norm,0]).to(disp_grid))
+            else:
+                cost[:, cost_idx, :, :, :]   = F.grid_sample(right_feat, disp_grid)
+
+        
+        cos_sim = self.similarity(cost, left_feat.unsqueeze(1))
+        max_cos_sim = cos_sim.argmax(dim=1)
+        fine_levels = torch.ones_like(cos_sim) * fine_levels[None,:,None,None].to(cos_sim)
+        fine_disp = fine_levels.gather(1, max_cos_sim.unsqueeze(1))
+
+
+        return (coarse_disp.unsqueeze(1) + fine_disp) * 4.0
+
+def merge_feature_levels(features):
+
+    merged_size = (features['res2'].shape[-2], features['res2'].shape[-1])
+    features_merged = torch.cat([
+        features['res2'],
+        F.interpolate(features['res3'], size=merged_size, mode="bilinear"),
+        F.interpolate(features['res4'], size=merged_size, mode="bilinear")],
+        # F.interpolate(features['res5'], size=merged_size, mode="bilinear"),
+        dim=1
+    )
+    return features_merged
 
 @META_ARCH_REGISTRY.register()
 class MaskFormerStereo(nn.Module):
@@ -672,6 +828,7 @@ class MaskFormerStereo(nn.Module):
         backbone: Backbone,
         sem_seg_head: nn.Module,
         upsampler = nn.Module,
+        fpn = nn.Module,
         refinement_layer = nn.Module,
         criterion: nn.Module,
         num_queries: int,
@@ -718,6 +875,7 @@ class MaskFormerStereo(nn.Module):
         self.refinement_layer = refinement_layer
         self.criterion = criterion
         self.upsampler = upsampler
+        self.fpn = fpn
         self.num_queries = num_queries
         self.overlap_threshold = overlap_threshold
         self.object_mask_threshold = object_mask_threshold
@@ -756,7 +914,8 @@ class MaskFormerStereo(nn.Module):
 
         sem_seg_head = build_sem_seg_head(cfg, seg_head_input_shape)
 
-        refinement_layer = PSMNet(192, 4)
+        # refinement_layer = CosineSimMatching(fine_disp_levels=4, resolution=0.25)
+        refinement_layer = PSMNet(192, 4, 48)
         # refinement_layer = DispRefineLayer(in_channel=cfg.MODEL.SEM_SEG_HEAD.MASK_DIM+1)
         # refinement_layer = DispRefineLayer(in_channel=513)
 
@@ -808,6 +967,23 @@ class MaskFormerStereo(nn.Module):
 
         upsampler = None
 
+
+        fpn_input_shape = {}
+        for out_key in backbone.output_shape().keys():
+            shape_spec = backbone.output_shape()[out_key]
+            fpn_input_shape[out_key] = ShapeSpec(
+                channels=shape_spec.channels,
+                height=shape_spec.height,
+                width=shape_spec.width,
+                stride=shape_spec.stride
+            )
+        fpn = BasePixelDecoder(
+            input_shape=fpn_input_shape,
+            conv_dim=256,
+            mask_dim=64,
+            norm='GN'
+        )
+
         # upsampler = UpsampleMasks(
         #     conv_dim=192,
         # )
@@ -818,6 +994,7 @@ class MaskFormerStereo(nn.Module):
             "refinement_layer": refinement_layer,
             "criterion": criterion,
             "upsampler": upsampler,
+            "fpn": fpn,
             "num_queries": cfg.MODEL.MASK_FORMER.NUM_OBJECT_QUERIES,
             "object_mask_threshold": cfg.MODEL.MASK_FORMER.TEST.OBJECT_MASK_THRESHOLD,
             "overlap_threshold": cfg.MODEL.MASK_FORMER.TEST.OVERLAP_THRESHOLD,
@@ -887,25 +1064,48 @@ class MaskFormerStereo(nn.Module):
 
         outputs = self.sem_seg_head(features)
 
+        # coarse_disp = calc_disp(F.interpolate(outputs['pred_masks'].permute((0,2,1,3)), [192, outputs['pred_masks'].shape[-1]], mode='bilinear').permute((0,2,1,3)))
 
-        fine_seg = self.refinement_layer(features_left['res2'], features_right['res2'])
-        fine_seg = F.interpolate(
-            fine_seg,
+        # coarse_disp = calc_disp(outputs['pred_masks'])
+
+        # # DEBUG
+        # coarse_disp = torch.stack([t['sem_seg'] for t in batched_inputs]).unsqueeze(1)
+        # coarse_disp = F.interpolate(
+        #     coarse_disp,
+        #     size=(features_left['res2'].shape[-2], features_left['res2'].shape[-1]),
+        #     mode="bilinear",
+        #     align_corners=False,
+        # ) / 4.0
+
+        # gt_seg = torch.stack([i['sem_seg'] for i in batched_inputs]).to(self.device)
+        # with torch.no_grad():
+        # outputs['pred_seg'] = self.refinement_layer(features_left['res2'], features_right['res2'], coarse_disp.squeeze(1))
+        features_left, _, _ = self.fpn.forward_features(features_left)
+        features_right, _, _ = self.fpn.forward_features(features_right)
+        
+        # outputs['pred_seg'] = self.refinement_layer(features_left, features_right, coarse_disp.squeeze(1))
+        outputs['pred_seg'] = self.refinement_layer(features_left, features_right, outputs['pred_masks'])
+            # DEBUG
+            # outputs['pred_seg'] = self.refinement_layer(images_left, images_right, gt_seg)
+        # outputs['pred_seg'] = coarse_disp + fine_disp * 4.0
+
+        outputs['pred_seg'] = F.interpolate(
+            outputs['pred_seg'],
             size=(images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
             mode="bilinear",
             align_corners=False,
         )
 
-        #interpolate pred mask array
-        outputs['pred_masks'] = F.interpolate(
-            outputs['pred_masks'][None],
-            size=(192, images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
-            mode="trilinear",
-            align_corners=False,
-        ).squeeze(0)
+        # #interpolate pred mask array
+        # masks = F.interpolate(
+        #     outputs['pred_masks'][None],
+        #     size=(192, images_left.tensor.shape[-2], images_left.tensor.shape[-1]),
+        #     mode="trilinear",
+        #     align_corners=False,
+        # ).squeeze(0)
 
-        # calculate seg masks
-        outputs['pred_seg'] = F.relu(calc_disp(outputs['pred_masks']) - fine_seg)
+        # # calculate seg masks
+        # outputs['pred_seg'] = calc_disp(outputs['pred_masks'])  + fine_disp
         # outputs['pred_seg'] = self.refinement_layer(outputs['mask_features'], outputs['pred_seg'])
         # outputs['pred_seg'] = self.refinement_layer(features['res2'], outputs['pred_seg'])
 
@@ -1040,7 +1240,7 @@ class MaskFormerStereo(nn.Module):
         # # semseg = (mask_pred * mask_cls).sum(0)
         # # semseg = (semseg * classes).sum(0)
         # semseg = (mask_pred * classes).sum(0)
-        return mask_pred
+        return F.relu(mask_pred)
 
     def panoptic_inference(self, mask_cls, mask_pred):
         scores, labels = F.softmax(mask_cls, dim=-1).max(-1)

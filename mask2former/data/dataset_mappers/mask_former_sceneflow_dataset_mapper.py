@@ -127,7 +127,8 @@ class MaskFormerSceneFlowDatasetMapper:
             if len(sem_seg_gt.shape)==3:
                 sem_seg_gt = sem_seg_gt[:,:,0:3]
             sem_seg_gt = np.array(sem_seg_gt, dtype=np.float) #np.array(sem_seg_gt.round(), dtype=np.uint8) #
-            sem_seg_gt[sem_seg_gt > 192] = 0
+            sem_seg_gt[sem_seg_gt >= 192] = self.ignore_label
+            sem_seg_gt[sem_seg_gt <= 0] = self.ignore_label
         else:
             sem_seg_gt = None
 
@@ -181,8 +182,9 @@ class MaskFormerSceneFlowDatasetMapper:
         # Prepare per-category binary masks
         if sem_seg_gt is not None:
             sem_seg_gt = sem_seg_gt.numpy()
-            sem_seg_gt = np.array(np.ceil(sem_seg_gt / 4.0), dtype=np.uint8)
-            sem_seg_gt[sem_seg_gt > self.num_classes] = 0
+            sem_seg_gt[sem_seg_gt <= 0] = self.ignore_label
+            sem_seg_gt = np.array(np.floor(sem_seg_gt / 4.0), dtype=np.uint8)
+            sem_seg_gt[sem_seg_gt > self.num_classes-1] = self.ignore_label
             instances = Instances(image_shape)
             classes = np.unique(sem_seg_gt)
             # remove ignored region
